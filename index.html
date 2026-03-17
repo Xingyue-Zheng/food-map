@@ -1,0 +1,1053 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>今天吃什么 · 大学城美食地图</title>
+<link href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=Noto+Sans+SC:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --coral:#FF6B6B;--peach:#FFA07A;--yellow:#FFD93D;--mint:#6BCB77;
+  --sky:#4D96FF;--lav:#C77DFF;--cream:#FFF9F0;--ink:#1E1E1E;
+  --muted:#888;--border:rgba(0,0,0,0.08);
+  --s0:0 2px 12px rgba(0,0,0,.08);--s1:0 8px 32px rgba(0,0,0,.12);--s2:0 24px 64px rgba(0,0,0,.18);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html,body{height:100%;overflow:hidden;}
+body{font-family:'Noto Sans SC',sans-serif;background:#1A1A1A;color:var(--ink);}
+
+/* ── NAV ── */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;
+  background:rgba(20,20,20,.92);backdrop-filter:blur(20px);
+  height:60px;display:flex;align-items:center;justify-content:space-between;padding:0 20px;
+  border-bottom:1px solid rgba(255,255,255,.08);}
+.logo{display:flex;align-items:center;gap:9px;font-family:'Ma Shan Zheng',cursive;font-size:20px;color:#fff;}
+.logo-b{width:36px;height:36px;background:linear-gradient(135deg,var(--coral),var(--peach));
+  border-radius:50% 40% 60% 30%/60% 50% 40% 50%;display:flex;align-items:center;justify-content:center;
+  font-size:18px;animation:bwob 4s ease-in-out infinite;}
+@keyframes bwob{0%,100%{border-radius:50% 40% 60% 30%/60% 50% 40% 50%;}
+  33%{border-radius:40% 60% 30% 70%/50% 60% 40% 50%;}
+  66%{border-radius:60% 30% 70% 40%/40% 50% 60% 50%;}}
+.nav-tabs{display:flex;gap:2px;background:rgba(255,255,255,.08);padding:4px;border-radius:28px;}
+.ntab{padding:6px 16px;border-radius:22px;border:none;background:transparent;
+  font-size:13px;font-weight:500;cursor:pointer;font-family:inherit;color:rgba(255,255,255,.55);
+  transition:all .2s;white-space:nowrap;}
+.ntab.active{background:#fff;color:var(--ink);}
+.campus-sel{padding:7px 14px;border-radius:28px;border:1px solid rgba(255,255,255,.15);
+  background:rgba(255,255,255,.06);font-size:12px;font-family:inherit;color:#fff;
+  cursor:pointer;outline:none;}
+.campus-sel option{background:#222;color:#fff;}
+
+/* ── VIEWS ── */
+.view{display:none;position:fixed;inset:0;top:60px;overflow:hidden;}
+.view.active{display:block;}
+
+/* ════════════════════════════
+   SWIPE VIEW — 食欲翻牌
+════════════════════════════ */
+#view-swipe{background:#111;}
+.swipe-arena{
+  position:absolute;inset:0;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  padding:16px 16px 80px;
+}
+.swipe-hint{
+  color:rgba(255,255,255,.35);font-size:12px;letter-spacing:.04em;
+  margin-bottom:16px;display:flex;gap:24px;align-items:center;
+}
+.swipe-hint span{display:flex;align-items:center;gap:5px;}
+
+/* Card stack */
+.card-stack{position:relative;width:min(380px,94vw);height:min(560px,70vh);}
+.food-card{
+  position:absolute;inset:0;border-radius:28px;overflow:hidden;
+  cursor:grab;user-select:none;touch-action:none;
+  box-shadow:0 24px 80px rgba(0,0,0,.6);
+  transition:box-shadow .2s;will-change:transform;
+}
+.food-card:active{cursor:grabbing;}
+.food-card.is-top{z-index:10;}
+.food-card.is-second{z-index:9;transform:scale(.95) translateY(16px);}
+.food-card.is-third{z-index:8;transform:scale(.90) translateY(30px);}
+
+/* Beautiful gradient food backgrounds */
+.card-bg{
+  width:100%;height:100%;position:relative;
+  display:flex;align-items:flex-end;
+}
+.card-food-emoji{
+  position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+  font-size:clamp(100px,20vw,160px);
+  filter:drop-shadow(0 8px 24px rgba(0,0,0,.4));
+  z-index:1;
+}
+.card-noise{
+  position:absolute;inset:0;
+  background:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+  z-index:2;pointer-events:none;opacity:.4;
+}
+.card-gradient{
+  position:absolute;inset:0;z-index:3;
+  background:linear-gradient(to top, rgba(0,0,0,.9) 0%, rgba(0,0,0,.3) 45%, transparent 70%);
+}
+.card-info{
+  position:relative;z-index:4;padding:24px 24px 28px;width:100%;
+}
+.card-restaurant{font-size:22px;font-weight:700;color:#fff;margin-bottom:8px;line-height:1.2;}
+.card-chips{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px;}
+.cchip{
+  padding:4px 12px;border-radius:20px;font-size:12px;font-weight:600;
+  backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.15);
+}
+.cc-w{background:rgba(255,255,255,.15);color:#fff;}
+.cc-g{background:rgba(107,203,119,.3);color:#a8f5b0;}
+.cc-y{background:rgba(255,217,61,.25);color:#ffe566;}
+.cc-r{background:rgba(255,107,107,.25);color:#ff9090;}
+.card-tags-row{display:flex;gap:6px;flex-wrap:wrap;}
+.ctag{font-size:11px;color:rgba(255,255,255,.5);}
+
+/* Vote overlays */
+.vote-overlay{
+  position:absolute;inset:0;z-index:20;
+  border-radius:28px;display:flex;align-items:center;justify-content:center;
+  opacity:0;transition:opacity .1s;pointer-events:none;
+}
+.vote-yes{background:linear-gradient(135deg,rgba(107,203,119,.6),rgba(77,200,100,.3));}
+.vote-no{background:linear-gradient(135deg,rgba(255,107,107,.6),rgba(200,50,50,.3));}
+.vote-label{
+  font-family:'Ma Shan Zheng',cursive;font-size:52px;color:#fff;
+  border:4px solid #fff;border-radius:16px;padding:8px 20px;
+  transform:rotate(-12deg);
+  filter:drop-shadow(0 4px 12px rgba(0,0,0,.4));
+}
+.vote-no .vote-label{transform:rotate(12deg);}
+
+/* Action buttons */
+.swipe-btns{
+  position:absolute;bottom:16px;left:50%;transform:translateX(-50%);
+  display:flex;gap:20px;align-items:center;z-index:20;
+}
+.swipe-btn{
+  width:60px;height:60px;border-radius:50%;border:none;
+  display:flex;align-items:center;justify-content:center;
+  font-size:24px;cursor:pointer;transition:all .2s;
+  box-shadow:0 8px 24px rgba(0,0,0,.4);
+}
+.swipe-btn:hover{transform:scale(1.1);}
+.swipe-btn:active{transform:scale(.95);}
+.btn-pass{background:rgba(255,80,80,.15);border:2px solid rgba(255,80,80,.5);color:#ff6b6b;}
+.btn-pass:hover{background:rgba(255,80,80,.25);}
+.btn-like{background:linear-gradient(135deg,#6BCB77,#4CAF50);color:#fff;}
+.btn-undo{width:44px;height:44px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);color:rgba(255,255,255,.6);font-size:18px;}
+
+/* Match popup */
+.match-popup{
+  position:fixed;inset:0;z-index:200;
+  background:rgba(0,0,0,.8);backdrop-filter:blur(12px);
+  display:none;align-items:center;justify-content:center;padding:24px;
+}
+.match-popup.open{display:flex;}
+.match-card{
+  background:#fff;border-radius:28px;overflow:hidden;
+  width:min(400px,92vw);animation:matchPop .4s cubic-bezier(.34,1.56,.64,1);
+}
+@keyframes matchPop{from{opacity:0;transform:scale(.7)}to{opacity:1;transform:scale(1)}}
+.match-hero{height:200px;display:flex;align-items:center;justify-content:center;font-size:90px;position:relative;}
+.match-confetti{position:absolute;inset:0;overflow:hidden;pointer-events:none;}
+.confetti-dot{position:absolute;width:8px;height:8px;border-radius:50%;animation:confettiFall 1.5s ease-in both;}
+@keyframes confettiFall{from{transform:translateY(-20px) rotate(0);opacity:1;}to{transform:translateY(200px) rotate(360deg);opacity:0;}}
+.match-body{padding:24px;}
+.match-wow{font-family:'Ma Shan Zheng',cursive;font-size:28px;color:var(--coral);text-align:center;margin-bottom:16px;}
+.match-name{font-size:20px;font-weight:700;margin-bottom:12px;}
+.match-details{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px;}
+.mdet{background:#f8f8f8;border-radius:12px;padding:12px;text-align:center;}
+.mdet-val{font-size:18px;font-weight:700;color:var(--coral);margin-bottom:2px;}
+.mdet-lbl{font-size:11px;color:var(--muted);}
+.match-btns{display:flex;gap:10px;}
+.mbtn{flex:1;padding:13px;border-radius:12px;border:none;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;transition:all .2s;}
+.mbtn-p{background:var(--coral);color:#fff;}.mbtn-p:hover{background:#ff5252;}
+.mbtn-s{background:#f0f0f0;color:var(--ink);}
+
+/* Empty state */
+.swipe-empty{
+  position:absolute;inset:0;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;gap:16px;padding-bottom:60px;
+}
+.swipe-empty .ei{font-size:72px;animation:wobble 2s ease-in-out infinite;}
+@keyframes wobble{0%,100%{transform:rotate(-8deg)}50%{transform:rotate(8deg)}}
+.swipe-empty h3{font-family:'Ma Shan Zheng',cursive;font-size:28px;color:#fff;}
+.swipe-empty p{font-size:14px;color:rgba(255,255,255,.5);}
+.reset-btn{padding:12px 28px;border-radius:30px;background:var(--coral);color:#fff;border:none;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;}
+
+/* ════════════════════════════
+   HOT LIST 食堂热搜榜
+════════════════════════════ */
+#view-hot{background:var(--cream);overflow-y:auto;}
+.hot-container{max-width:700px;margin:0 auto;padding:24px 20px 80px;}
+.hot-header{
+  background:linear-gradient(135deg,#FF4500 0%,#FF8C00 50%,#FFD700 100%);
+  border-radius:24px;padding:28px 28px 24px;margin-bottom:24px;
+  position:relative;overflow:hidden;
+}
+.hot-header::before{
+  content:'';position:absolute;top:-30px;right:-30px;
+  width:160px;height:160px;border-radius:50%;
+  background:rgba(255,255,255,.1);
+}
+.hot-header h2{font-family:'Ma Shan Zheng',cursive;font-size:30px;color:#fff;margin-bottom:6px;}
+.hot-header p{font-size:13px;color:rgba(255,255,255,.8);}
+.hot-update{
+  display:inline-flex;align-items:center;gap:6px;
+  background:rgba(255,255,255,.2);color:#fff;
+  padding:4px 12px;border-radius:20px;font-size:11px;font-weight:500;margin-top:10px;
+}
+.live-dot{width:6px;height:6px;background:#fff;border-radius:50%;animation:pulse 1.5s ease-in-out infinite;}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.8)}}
+
+/* Hot list categories */
+.hot-cats{display:flex;gap:8px;overflow-x:auto;padding-bottom:4px;margin-bottom:20px;}
+.hcat{padding:7px 16px;border-radius:20px;font-size:12px;font-weight:600;
+  border:1.5px solid var(--border);background:#fff;cursor:pointer;
+  transition:all .18s;font-family:inherit;white-space:nowrap;flex-shrink:0;}
+.hcat.active{background:var(--ink);color:#fff;border-color:var(--ink);}
+
+/* Hot list items */
+.hot-list{display:flex;flex-direction:column;gap:12px;}
+.hot-item{
+  background:#fff;border-radius:20px;padding:16px 20px;
+  display:flex;align-items:center;gap:16px;cursor:pointer;
+  transition:all .2s;border:1.5px solid transparent;
+  box-shadow:var(--s0);
+}
+.hot-item:hover{border-color:var(--coral);transform:translateX(4px);box-shadow:var(--s1);}
+
+/* Rank badges */
+.rank{width:36px;flex-shrink:0;text-align:center;}
+.rank-num{font-size:20px;font-weight:900;line-height:1;}
+.rank-1{color:#FF4500;}
+.rank-2{color:#FF8C00;}
+.rank-3{color:#FFD700;}
+.rank-n{font-size:16px;color:#bbb;}
+.rank-arrow{font-size:10px;margin-top:2px;}
+.arr-up{color:var(--coral);}
+.arr-dn{color:var(--sky);}
+.arr-st{color:#bbb;}
+
+.hot-emoji{font-size:36px;flex-shrink:0;}
+.hot-info{flex:1;min-width:0;}
+.hot-name{font-size:15px;font-weight:700;margin-bottom:5px;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+/* The special label tags */
+.hot-label{
+  display:inline-block;
+  padding:3px 10px;border-radius:6px;font-size:11px;font-weight:700;
+  margin-bottom:6px;
+}
+.hl-fire{background:#FFF0E6;color:#C84B00;}
+.hl-magic{background:#F0F0FF;color:#5A00E0;}
+.hl-soul{background:#FFF5E0;color:#B06000;}
+.hl-hype{background:#FFE8F0;color:#C0005A;}
+.hl-hidden{background:#E8FFF0;color:#006B30;}
+.hl-cult{background:#E8F5FF;color:#004FA0;}
+.hl-vibe{background:#F5F0FF;color:#6000C0;}
+.hl-late{background:#1A1A2E;color:#7B9FFF;}
+
+.hot-sub{font-size:12px;color:var(--muted);display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+.hot-sub span{display:flex;align-items:center;gap:3px;}
+.hot-right{text-align:right;flex-shrink:0;}
+.hot-score{font-size:18px;font-weight:900;
+  background:linear-gradient(135deg,var(--coral),var(--peach));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+}
+.hot-heat{font-size:11px;color:var(--muted);}
+.trending-bar{width:60px;height:4px;background:#f0f0f0;border-radius:2px;margin-top:4px;overflow:hidden;}
+.trending-fill{height:100%;background:linear-gradient(90deg,var(--coral),var(--peach));border-radius:2px;}
+
+/* Topic tags floating section */
+.topic-section{margin-bottom:24px;}
+.topic-title{font-size:13px;font-weight:700;color:var(--muted);letter-spacing:.04em;text-transform:uppercase;margin-bottom:12px;}
+.topic-cloud{display:flex;flex-wrap:wrap;gap:8px;}
+.topic-tag{
+  padding:7px 14px;border-radius:10px;font-size:12px;font-weight:600;
+  cursor:pointer;transition:all .18s;border:none;font-family:inherit;
+}
+.topic-tag:hover{transform:translateY(-2px);box-shadow:var(--s0);}
+.tt-1{background:#FFE8D6;color:#C84B00;}
+.tt-2{background:#E8F4FF;color:#0052CC;}
+.tt-3{background:#EDFFF4;color:#006B30;}
+.tt-4{background:#FFF0FB;color:#9B0066;}
+.tt-5{background:#FFF9E0;color:#7A5C00;}
+.tt-6{background:#EEE8FF;color:#5A00B4;}
+.tt-7{background:#FFE8E8;color:#C00000;}
+.tt-8{background:#E8FFF8;color:#005E4C;}
+
+/* ════════════════════════════
+   HOME — 帮我选
+════════════════════════════ */
+#view-home{background:var(--cream);overflow-y:auto;}
+.home-wrap{padding:24px 20px 80px;max-width:860px;margin:0 auto;}
+.hero-head{text-align:center;padding:24px 0 32px;}
+.hero-head h1{font-family:'Ma Shan Zheng',cursive;font-size:48px;line-height:1.1;
+  background:linear-gradient(135deg,var(--coral) 0%,var(--peach) 50%,var(--yellow) 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:8px;}
+.hero-head p{font-size:14px;color:var(--muted);}
+.card-box{background:#fff;border-radius:24px;padding:24px;box-shadow:var(--s0);margin-bottom:20px;border:1.5px solid rgba(255,107,107,.1);}
+.box-lbl{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-bottom:14px;}
+.mood-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:18px;}
+.mood-card{padding:12px 6px;text-align:center;border-radius:14px;cursor:pointer;
+  transition:all .2s;border:2px solid transparent;background:#fafafa;}
+.mood-card:hover{transform:translateY(-2px);box-shadow:var(--s0);}
+.mood-card.sel{border-color:var(--coral);background:#fff5f5;transform:translateY(-2px);}
+.mi{font-size:26px;margin-bottom:4px;}.ml{font-size:11px;font-weight:600;}.ms{font-size:10px;color:var(--muted);margin-top:1px;}
+.budget-row{display:flex;align-items:center;gap:10px;margin-bottom:18px;flex-wrap:wrap;}
+.blabel{font-size:13px;font-weight:500;color:var(--muted);white-space:nowrap;}
+.bpills{display:flex;gap:6px;flex-wrap:wrap;}
+.bpill{padding:6px 14px;border-radius:18px;font-size:12px;font-weight:500;
+  border:1.5px solid var(--border);background:#fff;cursor:pointer;transition:all .18s;font-family:inherit;}
+.bpill.active{background:var(--yellow);border-color:var(--yellow);color:var(--ink);}
+.big-btn{width:100%;padding:16px;border-radius:14px;border:none;
+  font-family:'Ma Shan Zheng',cursive;font-size:20px;cursor:pointer;transition:all .25s;
+  background:linear-gradient(135deg,var(--coral) 0%,var(--peach) 100%);color:#fff;letter-spacing:2px;
+  box-shadow:0 6px 24px rgba(255,107,107,.4);}
+.big-btn:hover{transform:translateY(-2px);}
+.spin-ico{animation:spin 2s linear infinite;display:inline-block;}
+@keyframes spin{from{transform:rotate(0)}to{transform:rotate(360deg)}}
+.result-area{margin-bottom:20px;}
+.result-card{background:#fff;border-radius:24px;box-shadow:0 20px 60px rgba(0,0,0,.12);overflow:hidden;border:2px solid var(--yellow);animation:popIn .4s cubic-bezier(.34,1.56,.64,1);}
+@keyframes popIn{from{opacity:0;transform:scale(.85) translateY(16px);}to{opacity:1;transform:scale(1) translateY(0);}}
+.res-hero{height:160px;display:flex;align-items:center;justify-content:center;font-size:80px;position:relative;}
+.winner-b{position:absolute;top:12px;left:12px;background:var(--yellow);color:var(--ink);padding:5px 12px;border-radius:18px;font-size:12px;font-weight:700;}
+.res-body{padding:18px 20px 20px;}
+.res-name{font-size:22px;font-weight:700;margin-bottom:6px;}
+.res-meta{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px;}
+.rchip{padding:3px 10px;border-radius:18px;font-size:11px;font-weight:600;}
+.rc-r{background:#FFF3EF;color:var(--coral);}
+.rc-y{background:#FFF8E1;color:#F57F17;}
+.rc-g{background:#E8F5E9;color:#2E7D32;}
+.rc-b{background:#E3F2FD;color:#1565C0;}
+.res-reason{background:linear-gradient(135deg,#FFF9F0,#FFF5F5);border-radius:10px;padding:12px 14px;font-size:12px;color:#555;line-height:1.7;border-left:3px solid var(--coral);margin-bottom:14px;}
+.res-btns{display:flex;gap:8px;}
+.ra-btn{flex:1;padding:11px;border-radius:10px;border:none;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;transition:all .2s;}
+.ra-p{background:var(--coral);color:#fff;}.ra-b{background:var(--sky);color:#fff;}.ra-s{background:#f0f0f0;color:var(--ink);}
+.ldots{display:flex;justify-content:center;gap:8px;padding:20px;}
+.ldots span{width:10px;height:10px;border-radius:50%;background:var(--coral);animation:db 1.2s ease-in-out infinite;}
+.ldots span:nth-child(2){animation-delay:.2s;background:var(--peach);}
+.ldots span:nth-child(3){animation-delay:.4s;background:var(--yellow);}
+@keyframes db{0%,80%,100%{transform:scale(.6);opacity:.4}40%{transform:scale(1);opacity:1}}
+
+/* ════════════════════════════
+   EXPLORE
+════════════════════════════ */
+#view-explore{background:var(--cream);overflow-y:auto;}
+.expl-sec{max-width:1100px;margin:0 auto;padding:24px 20px 80px;}
+.sec-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;}
+.sec-title{font-family:'Ma Shan Zheng',cursive;font-size:24px;}
+.filter-row{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:14px;}
+.fchip{padding:6px 14px;border-radius:18px;font-size:12px;font-weight:500;
+  border:1.5px solid var(--border);background:#fff;cursor:pointer;transition:all .18s;font-family:inherit;white-space:nowrap;}
+.fchip.active{border-color:transparent;color:#fff;}
+.fc-all.active{background:var(--ink);}
+.fc-rice.active{background:var(--coral);}
+.fc-noodle.active{background:var(--peach);}
+.fc-bbq.active{background:#E65100;}
+.fc-hotpot.active{background:#B71C1C;}
+.fc-western.active{background:var(--sky);}
+.fc-dessert.active{background:var(--lav);}
+.fc-snack.active{background:var(--mint);}
+.search-row{display:flex;gap:10px;margin-bottom:16px;}
+.si-wrap{flex:1;display:flex;align-items:center;gap:8px;background:#fff;border-radius:28px;
+  padding:9px 18px;border:1.5px solid var(--border);box-shadow:var(--s0);transition:border-color .2s;}
+.si-wrap:focus-within{border-color:var(--coral);}
+.si-wrap input{flex:1;border:none;outline:none;font-size:14px;font-family:inherit;background:transparent;}
+.sort-sel{padding:9px 16px;border-radius:28px;border:1.5px solid var(--border);background:#fff;font-size:12px;font-family:inherit;cursor:pointer;outline:none;}
+.cards-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px;}
+.rcard{background:#fff;border-radius:18px;overflow:hidden;border:1.5px solid var(--border);cursor:pointer;transition:all .22s;}
+.rcard:hover{transform:translateY(-4px);box-shadow:0 16px 48px rgba(0,0,0,.1);border-color:transparent;}
+.rc-img{height:140px;display:flex;align-items:center;justify-content:center;font-size:60px;position:relative;}
+.rc-badges{position:absolute;top:8px;left:8px;display:flex;gap:4px;}
+.rbadge{padding:2px 8px;border-radius:5px;font-size:10px;font-weight:700;backdrop-filter:blur(4px);}
+.rb-h{background:rgba(255,107,107,.9);color:#fff;}
+.rb-n{background:rgba(107,203,119,.9);color:#fff;}
+.rb-d{background:rgba(255,217,61,.9);color:var(--ink);}
+.rb-s{background:rgba(77,150,255,.9);color:#fff;}
+.ftog{position:absolute;top:8px;right:8px;width:30px;height:30px;border-radius:50%;
+  background:rgba(255,255,255,.9);border:none;cursor:pointer;font-size:15px;
+  display:flex;align-items:center;justify-content:center;transition:transform .2s;}
+.ftog:hover{transform:scale(1.2);}
+.rc-body{padding:12px 14px 14px;}
+.rc-name{font-size:14px;font-weight:700;margin-bottom:5px;display:flex;justify-content:space-between;align-items:flex-start;}
+.rc-score{font-size:13px;color:#F57F17;font-weight:700;white-space:nowrap;margin-left:6px;}
+.rc-tags{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:7px;}
+.rtag{padding:2px 7px;background:#f5f5f5;border-radius:4px;font-size:10px;color:var(--muted);}
+.rc-info{font-size:11px;color:var(--muted);display:flex;gap:10px;margin-bottom:8px;}
+.rc-deal{background:#FFF5F5;color:var(--coral);font-size:10px;font-weight:600;padding:3px 9px;border-radius:5px;margin-bottom:8px;}
+.rc-foot{border-top:1px solid var(--border);padding-top:9px;display:flex;justify-content:space-between;align-items:center;}
+.rcampus{font-size:10px;color:var(--sky);font-weight:500;}
+.rc-btns{display:flex;gap:5px;}
+.rbtn{padding:4px 12px;border-radius:7px;border:none;font-size:11px;font-weight:600;cursor:pointer;font-family:inherit;transition:all .15s;}
+.rbtn-p{background:var(--coral);color:#fff;}
+.rbtn-s{background:#f0f0f0;color:var(--ink);}
+
+/* ── DRAWER ── */
+.overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:200;
+  align-items:flex-end;justify-content:center;backdrop-filter:blur(6px);}
+.overlay.open{display:flex;}
+.drawer{background:#fff;border-radius:28px 28px 0 0;width:100%;max-width:560px;max-height:88vh;overflow-y:auto;
+  animation:slideUp .35s cubic-bezier(.34,1.56,.64,1);}
+@keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
+.dhandle{width:44px;height:4px;background:#ddd;border-radius:2px;margin:12px auto 0;}
+.drhero{height:180px;display:flex;align-items:center;justify-content:center;font-size:88px;}
+.drbody{padding:0 22px 22px;}
+.drtitle{font-size:22px;font-weight:700;margin-bottom:6px;}
+.drchips{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:12px;}
+.drc{padding:4px 11px;border-radius:18px;font-size:11px;font-weight:600;}
+.drc-r{background:#FFF3EF;color:var(--coral);}
+.drc-y{background:#FFF8E1;color:#F57F17;}
+.drc-g{background:#E8F5E9;color:#2E7D32;}
+.drc-b{background:#E3F2FD;color:#1565C0;}
+.drsec{margin-bottom:18px;}
+.drsec h4{font-size:13px;font-weight:700;margin-bottom:10px;}
+.mrow{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--border);}
+.mrow:last-child{border-bottom:none;}
+.memoji{font-size:26px;}
+.minfo{flex:1;}
+.mname{font-size:13px;font-weight:600;}.mdesc{font-size:11px;color:var(--muted);}
+.mprice{font-size:14px;font-weight:700;color:var(--coral);}
+.rev-item{background:#fafafa;border-radius:10px;padding:10px 12px;margin-bottom:8px;}
+.rev-head{display:flex;align-items:center;gap:7px;margin-bottom:5px;}
+.rev-av{width:26px;height:26px;border-radius:50%;background:linear-gradient(135deg,var(--coral),var(--peach));color:#fff;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;}
+.rev-nm{font-size:12px;font-weight:600;}.rev-sc{font-size:10px;color:var(--muted);}
+.rev-tx{font-size:12px;color:#555;line-height:1.6;}
+.dr-deal{background:linear-gradient(135deg,#FFF5F5,#FFF9F0);border:1.5px solid #FFB74D;border-radius:10px;padding:10px 14px;margin:12px 0;font-size:12px;font-weight:600;color:#E65100;}
+.drfoot{display:flex;gap:8px;padding:14px 22px;border-top:1px solid var(--border);}
+.dfbtn{flex:1;padding:12px;border-radius:11px;border:none;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;transition:all .2s;}
+.dfbtn-p{background:var(--coral);color:#fff;}.dfbtn-s{background:#f0f0f0;color:var(--ink);}
+
+/* ── TOAST ── */
+.toast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(20px);
+  background:#1E1E1E;color:#fff;padding:11px 22px;border-radius:28px;font-size:13px;font-weight:500;
+  z-index:999;opacity:0;transition:all .3s;pointer-events:none;white-space:nowrap;box-shadow:var(--s1);}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+
+/* ── BOTTOM NAV (mobile feel) ── */
+.bottom-nav{
+  position:fixed;bottom:0;left:0;right:0;z-index:90;
+  background:rgba(20,20,20,.96);backdrop-filter:blur(20px);
+  height:62px;display:flex;align-items:center;justify-content:center;gap:4px;
+  border-top:1px solid rgba(255,255,255,.07);
+  padding:0 12px;
+}
+.bnav-btn{
+  flex:1;max-width:120px;height:46px;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;
+  border:none;background:transparent;cursor:pointer;font-family:inherit;
+  border-radius:12px;transition:all .18s;
+}
+.bnav-btn:hover{background:rgba(255,255,255,.06);}
+.bnav-btn.active{background:rgba(255,107,107,.15);}
+.bnav-icon{font-size:18px;line-height:1;}
+.bnav-label{font-size:10px;font-weight:500;color:rgba(255,255,255,.4);}
+.bnav-btn.active .bnav-label{color:var(--coral);}
+
+@media(max-width:580px){.mood-grid{grid-template-columns:repeat(2,1fr);}.nav-tabs{display:none;}}
+</style>
+</head>
+<body>
+
+<div class="toast" id="toast"></div>
+
+<!-- TOP NAV -->
+<nav>
+  <div class="logo"><div class="logo-b">🍜</div>今天吃什么</div>
+  <div class="nav-tabs">
+    <button class="ntab" onclick="sv('home',0)">🎲 帮我选</button>
+    <button class="ntab active" onclick="sv('swipe',1)">👈 食欲翻牌</button>
+    <button class="ntab" onclick="sv('hot',2)">🔥 热搜榜</button>
+    <button class="ntab" onclick="sv('explore',3)">🔍 探索</button>
+  </div>
+  <select class="campus-sel" id="campusSel" onchange="onCampus()">
+    <option value="all">📍 全部校区</option>
+    <option value="A">🔵 理工大学</option>
+    <option value="B">🟣 财经大学</option>
+    <option value="C">🟢 师范大学</option>
+    <option value="D">🟠 医科大学</option>
+    <option value="E">🔴 艺术学院</option>
+  </select>
+</nav>
+
+<!-- ══ VIEWS ══ -->
+
+<!-- HOME -->
+<div class="view" id="view-home">
+  <div class="home-wrap">
+    <div class="hero-head"><h1>今天，吃什么好？</h1><p>选择困难症救星 · 大学城 238 家餐厅</p></div>
+    <div class="card-box">
+      <div class="box-lbl">🧠 告诉我你现在的状态</div>
+      <div class="mood-grid" id="moodGrid">
+        <div class="mood-card" data-mood="hungry" onclick="pm(this)"><div class="mi">🤤</div><div class="ml">超级饿</div><div class="ms">要量大管饱</div></div>
+        <div class="mood-card" data-mood="tired"  onclick="pm(this)"><div class="mi">😴</div><div class="ml">累了一天</div><div class="ms">暖胃热乎乎</div></div>
+        <div class="mood-card" data-mood="happy"  onclick="pm(this)"><div class="mi">🥳</div><div class="ml">庆祝一下</div><div class="ms">好好犒劳</div></div>
+        <div class="mood-card" data-mood="rush"   onclick="pm(this)"><div class="mi">⚡</div><div class="ml">时间不多</div><div class="ms">快速搞定</div></div>
+        <div class="mood-card" data-mood="spicy"  onclick="pm(this)"><div class="mi">🌶️</div><div class="ml">想吃辣</div><div class="ms">越辣越爽</div></div>
+        <div class="mood-card" data-mood="sweet"  onclick="pm(this)"><div class="mi">🍡</div><div class="ml">想吃甜</div><div class="ms">甜品饮品</div></div>
+        <div class="mood-card" data-mood="gather" onclick="pm(this)"><div class="mi">👥</div><div class="ml">朋友聚餐</div><div class="ms">要有气氛</div></div>
+        <div class="mood-card" data-mood="broke"  onclick="pm(this)"><div class="mi">💸</div><div class="ml">快穷了</div><div class="ms">省钱优先</div></div>
+      </div>
+      <div class="budget-row">
+        <span class="blabel">💰 预算：</span>
+        <div class="bpills" id="bpills">
+          <button class="bpill" data-b="low" onclick="pb(this)">¥15以下</button>
+          <button class="bpill active" data-b="mid" onclick="pb(this)">¥15–30</button>
+          <button class="bpill" data-b="high" onclick="pb(this)">¥30以上</button>
+          <button class="bpill" data-b="any" onclick="pb(this)">随便</button>
+        </div>
+      </div>
+      <button class="big-btn" onclick="getRec()"><span class="spin-ico">✨</span> 帮我决定！</button>
+    </div>
+    <div class="result-area" id="resArea" style="display:none"></div>
+  </div>
+</div>
+
+<!-- SWIPE -->
+<div class="view active" id="view-swipe">
+  <div class="swipe-arena" id="swipeArena">
+    <div class="swipe-hint">
+      <span>👈 左滑 没感觉</span>
+      <span style="color:rgba(255,255,255,.15)">|</span>
+      <span>右滑 想吃 👉</span>
+    </div>
+    <div class="card-stack" id="cardStack"></div>
+    <div class="swipe-btns">
+      <button class="swipe-btn btn-pass" onclick="doSwipe('left')" title="Pass">✕</button>
+      <button class="swipe-btn btn-undo" onclick="undoSwipe()" title="撤回">↩</button>
+      <button class="swipe-btn btn-like" onclick="doSwipe('right')" title="想吃！">♥</button>
+    </div>
+  </div>
+</div>
+
+<!-- HOT LIST -->
+<div class="view" id="view-hot">
+  <div class="hot-container">
+    <div class="hot-header">
+      <h2>🔥 大学城食堂热搜榜</h2>
+      <p>实时热度 · 同学口碑 · 本周爆单排行</p>
+      <div class="hot-update"><div class="live-dot"></div>刚刚更新</div>
+    </div>
+
+    <div class="topic-section">
+      <div class="topic-title">🏷 本周热议话题</div>
+      <div class="topic-cloud">
+        <button class="topic-tag tt-1" onclick="toast('🔍 已为你筛选相关餐厅')">🌶 辣到哭着吃完</button>
+        <button class="topic-tag tt-2" onclick="toast('🔍 已为你筛选相关餐厅')">📚 复习神器补脑餐</button>
+        <button class="topic-tag tt-3" onclick="toast('🔍 已为你筛选相关餐厅')">🌿 素食星人也能吃</button>
+        <button class="topic-tag tt-4" onclick="toast('🔍 已为你筛选相关餐厅')">🌙 深夜2点还营业</button>
+        <button class="topic-tag tt-5" onclick="toast('🔍 已为你筛选相关餐厅')">🏮 老板塞满到溢出</button>
+        <button class="topic-tag tt-6" onclick="toast('🔍 已为你筛选相关餐厅')">📷 出片率极高</button>
+        <button class="topic-tag tt-7" onclick="toast('🔍 已为你筛选相关餐厅')">🎓 毕业季必打卡</button>
+        <button class="topic-tag tt-8" onclick="toast('🔍 已为你筛选相关餐厅')">💌 带对象必成功</button>
+      </div>
+    </div>
+
+    <div class="hot-cats" id="hotCats">
+      <button class="hcat active" data-hc="all" onclick="hcFilter(this)">全部</button>
+      <button class="hcat" data-hc="rice" onclick="hcFilter(this)">🍚 快餐</button>
+      <button class="hcat" data-hc="noodle" onclick="hcFilter(this)">🍜 面食</button>
+      <button class="hcat" data-hc="bbq" onclick="hcFilter(this)">🍢 烧烤</button>
+      <button class="hcat" data-hc="dessert" onclick="hcFilter(this)">🧋 甜品</button>
+      <button class="hcat" data-hc="snack" onclick="hcFilter(this)">🥟 夜宵</button>
+    </div>
+    <div class="hot-list" id="hotList"></div>
+  </div>
+</div>
+
+<!-- EXPLORE -->
+<div class="view" id="view-explore">
+  <div class="expl-sec">
+    <div class="sec-head">
+      <div class="sec-title">🔍 探索美食</div>
+      <span style="font-size:12px;color:var(--muted)" id="expCount">238 家</span>
+    </div>
+    <div class="search-row">
+      <div class="si-wrap"><span>🔍</span><input type="text" placeholder="搜索餐厅、菜品、口味..." oninput="hs(this.value)"></div>
+      <select class="sort-sel" onchange="hso(this.value)">
+        <option value="hot">🔥 热门</option>
+        <option value="rating">⭐ 评分</option>
+        <option value="price_asc">💰 最便宜</option>
+        <option value="dist">📍 最近</option>
+      </select>
+    </div>
+    <div class="filter-row" id="catFilter">
+      <button class="fchip fc-all active"     data-cat="all"     onclick="fc(this)">🍽️ 全部</button>
+      <button class="fchip fc-rice"    data-cat="rice"    onclick="fc(this)">🍚 快餐</button>
+      <button class="fchip fc-noodle"  data-cat="noodle"  onclick="fc(this)">🍜 面条</button>
+      <button class="fchip fc-bbq"     data-cat="bbq"     onclick="fc(this)">🍢 烧烤</button>
+      <button class="fchip fc-hotpot"  data-cat="hotpot"  onclick="fc(this)">🍲 火锅</button>
+      <button class="fchip fc-western" data-cat="western" onclick="fc(this)">🍔 西式</button>
+      <button class="fchip fc-dessert" data-cat="dessert" onclick="fc(this)">🧋 甜品</button>
+      <button class="fchip fc-snack"   data-cat="snack"   onclick="fc(this)">🥟 夜宵</button>
+    </div>
+    <div class="cards-grid" id="expGrid"></div>
+  </div>
+</div>
+
+<!-- MATCH POPUP -->
+<div class="match-popup" id="matchPopup">
+  <div class="match-card">
+    <div class="match-hero" id="matchHero">
+      <div class="match-confetti" id="confetti"></div>
+    </div>
+    <div class="match-body">
+      <div class="match-wow">🎉 就决定是你了！</div>
+      <div class="match-name" id="matchName"></div>
+      <div class="match-details" id="matchDetails"></div>
+      <div class="match-btns">
+        <button class="mbtn mbtn-s" onclick="closeMatch()">再看看</button>
+        <button class="mbtn mbtn-p" onclick="toast('🗺 导航已启动！');closeMatch()">📍 立刻出发</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- DETAIL DRAWER -->
+<div class="overlay" id="overlay" onclick="cd(event)">
+  <div class="drawer">
+    <div class="dhandle"></div>
+    <div class="drhero" id="drhero"></div>
+    <div class="drbody" id="drbody"></div>
+    <div class="drfoot">
+      <button class="dfbtn dfbtn-s" onclick="cd()">关闭</button>
+      <button class="dfbtn dfbtn-p" onclick="toast('🗺 导航已启动！');cd()">📍 导航前往</button>
+    </div>
+  </div>
+</div>
+
+<!-- BOTTOM NAV -->
+<div class="bottom-nav">
+  <button class="bnav-btn" onclick="sv('home',0)" id="bn0"><span class="bnav-icon">🎲</span><span class="bnav-label">帮我选</span></button>
+  <button class="bnav-btn active" onclick="sv('swipe',1)" id="bn1"><span class="bnav-icon">👈</span><span class="bnav-label">食欲翻牌</span></button>
+  <button class="bnav-btn" onclick="sv('hot',2)" id="bn2"><span class="bnav-icon">🔥</span><span class="bnav-label">热搜榜</span></button>
+  <button class="bnav-btn" onclick="sv('explore',3)" id="bn3"><span class="bnav-icon">🔍</span><span class="bnav-label">探索</span></button>
+</div>
+
+<script>
+/* ══════════ DATA ══════════ */
+const D=[
+  {id:1,nm:'老四川麻辣烫',e:'🌶️',bg:'linear-gradient(135deg,#3D0000 0%,#8B1A1A 50%,#C0392B 100%)',pBg:'#FFF0F0',r:4.8,rv:342,pN:12,pLb:'¥12/人',w:3,cp:'A',cn:'理工大学附近',ct:'noodle',tgs:['麻辣','自选','量大'],bd:['hot','deal'],dl:'学生8折',hr:'10:00–22:00',hd:true,
+   mn:[{e:'🥕',n:'经典麻辣烫',d:'20+种菜品',p:'¥12起'},{e:'🥚',n:'溏心蛋',d:'必点',p:'¥2'}],
+   rs:[{nm:'阿涛',sc:'理工大学',tx:'分量足，辣度自选，每周必去！'}],
+   mt:['hungry','spicy','broke'],heat:9820,rank:1,trend:'up',
+   hotLabel:{text:'辣界天花板·不哭不算赢',cls:'hl-fire'}},
+  {id:2,nm:'外婆家黄焖鸡',e:'🍗',bg:'linear-gradient(135deg,#2D1A00 0%,#7A4500 50%,#D4A017 100%)',pBg:'#FFFBF0',r:4.6,rv:289,pN:15,pLb:'¥15/人',w:5,cp:'B',cn:'财经大学附近',ct:'rice',tgs:['黄焖','香辣'],bd:['hot'],dl:null,hr:'09:00–21:00',hd:false,
+   mn:[{e:'🍗',n:'黄焖鸡米饭',d:'招牌嫩滑',p:'¥15'},{e:'🥦',n:'加菜',d:'时蔬',p:'¥3起'}],
+   rs:[{nm:'小明',sc:'财经大学',tx:'鸡肉超嫩，汤汁拌饭绝了！'}],
+   mt:['hungry','tired','broke'],heat:7640,rank:2,trend:'up',
+   hotLabel:{text:'打工人午饭续命神器',cls:'hl-soul'}},
+  {id:3,nm:'茶颜悦色',e:'🧋',bg:'linear-gradient(135deg,#1A0A2E 0%,#4A1580 50%,#9B59B6 100%)',pBg:'#F8F0FF',r:4.9,rv:512,pN:22,pLb:'¥22/人',w:2,cp:'C',cn:'师范大学附近',ct:'dessert',tgs:['奶茶','网红'],bd:['hot','new','deal'],dl:'买一送一今天限定',hr:'08:30–22:30',hd:true,
+   mn:[{e:'🧋',n:'幽兰拿铁',d:'招牌',p:'¥22'},{e:'☕',n:'声声乌龙',d:'清爽',p:'¥19'}],
+   rs:[{nm:'晴天',sc:'师范大学',tx:'幽兰拿铁必点！'}],
+   mt:['sweet','happy','gather'],heat:11200,rank:1,trend:'up',
+   hotLabel:{text:'排队2小时·一杯治愈期末',cls:'hl-hype'}},
+  {id:4,nm:'重庆小面王',e:'🍜',bg:'linear-gradient(135deg,#1A0000 0%,#6B0000 40%,#CC2200 100%)',pBg:'#F0FFF4',r:4.7,rv:198,pN:10,pLb:'¥10/人',w:4,cp:'A',cn:'理工大学附近',ct:'noodle',tgs:['重庆','麻辣'],bd:['student'],dl:null,hr:'06:30–14:00',hd:false,
+   mn:[{e:'🍜',n:'重庆小面',d:'正宗麻辣',p:'¥10'},{e:'🥩',n:'加牛肉',d:'卤牛肉',p:'¥5'}],
+   rs:[{nm:'渝味',sc:'理工大学',tx:'早餐一碗满血复活！'}],
+   mt:['hungry','rush','broke','spicy'],heat:6300,rank:3,trend:'st',
+   hotLabel:{text:'¥10干掉所有外卖·性价比之王',cls:'hl-cult'}},
+  {id:5,nm:'夜市烤串总店',e:'🍢',bg:'linear-gradient(135deg,#0D0A00 0%,#3D2200 40%,#8B4513 100%)',pBg:'#FFF5F0',r:4.4,rv:421,pN:28,pLb:'¥28/人',w:6,cp:'E',cn:'艺术学院附近',ct:'bbq',tgs:['烧烤','夜宵','聚餐'],bd:['hot','deal'],dl:'工作日9折',hr:'17:00–02:00',hd:true,
+   mn:[{e:'🥩',n:'牛肉串',d:'外焦里嫩',p:'¥5/串'},{e:'🌽',n:'烤玉米',d:'甜糯',p:'¥6'}],
+   rs:[{nm:'阿杰',sc:'艺术学院',tx:'夜宵来这里！'}],
+   mt:['gather','happy','spicy'],heat:8950,rank:2,trend:'up',
+   hotLabel:{text:'凌晨1点最有烟火气的地方',cls:'hl-late'}},
+  {id:6,nm:'蜀道难火锅',e:'🍲',bg:'linear-gradient(135deg,#1A0008 0%,#660020 50%,#CC0044 100%)',pBg:'#FFF0F5',r:4.6,rv:267,pN:45,pLb:'¥45/人',w:8,cp:'B',cn:'财经大学附近',ct:'hotpot',tgs:['火锅','聚餐','麻辣'],bd:['student'],dl:null,hr:'11:00–23:00',hd:false,
+   mn:[{e:'🥩',n:'毛肚',d:'脆嫩弹牙',p:'¥28'},{e:'🧀',n:'鸭血',d:'嫩滑',p:'¥8'}],
+   rs:[{nm:'川妹子',sc:'财经大学',tx:'汤底正宗，聚餐好地方！'}],
+   mt:['gather','happy','spicy'],heat:5800,rank:4,trend:'dn',
+   hotLabel:{text:'考完试哭着去庆祝的地方',cls:'hl-magic'}},
+  {id:7,nm:'肯德基大学城店',e:'🍔',bg:'linear-gradient(135deg,#0D0500 0%,#5C2000 50%,#E53900 100%)',pBg:'#F0FFF4',r:4.2,rv:893,pN:25,pLb:'¥25/人',w:1,cp:'C',cn:'师范大学附近',ct:'western',tgs:['快餐','炸鸡'],bd:['deal'],dl:'校园专属券-5元',hr:'07:00–23:00',hd:true,
+   mn:[{e:'🍗',n:'香辣鸡腿堡',d:'招牌',p:'¥19'},{e:'🍟',n:'薯条',d:'经典',p:'¥12'}],
+   rs:[{nm:'快乐肥宅',sc:'师范大学',tx:'早餐方便，优惠券省不少。'}],
+   mt:['rush','broke'],heat:12400,rank:1,trend:'st',
+   hotLabel:{text:'大学城人流量No.1·永远有人',cls:'hl-hype'}},
+  {id:8,nm:'甜品站杨枝甘露',e:'🍡',bg:'linear-gradient(135deg,#1A0F2E 0%,#6B2FA0 50%,#E040FB 100%)',pBg:'#FAF0FF',r:4.8,rv:305,pN:18,pLb:'¥18/人',w:3,cp:'E',cn:'艺术学院附近',ct:'dessert',tgs:['甜品','芒果'],bd:['hot','new','deal'],dl:'学生立减2元',hr:'12:00–22:00',hd:true,
+   mn:[{e:'🥭',n:'杨枝甘露',d:'芒果西柚椰浆',p:'¥18'},{e:'🍮',n:'班戟',d:'厚煎饼夹芒果',p:'¥15'}],
+   rs:[{nm:'学姐',sc:'艺术学院',tx:'颜值口感都满分！'}],
+   mt:['sweet','happy'],heat:7100,rank:2,trend:'up',
+   hotLabel:{text:'带对象必成功·成功率87%',cls:'hl-magic'}},
+  {id:9,nm:'深夜食堂关东煮',e:'🥘',bg:'linear-gradient(135deg,#050510 0%,#1A1A4E 50%,#2E4090 100%)',pBg:'#F0FFF4',r:4.6,rv:178,pN:15,pLb:'¥15/人',w:2,cp:'B',cn:'财经大学附近',ct:'snack',tgs:['关东煮','夜宵'],bd:['hot'],dl:null,hr:'16:00–01:30',hd:false,
+   mn:[{e:'🥚',n:'溏心蛋',d:'最受欢迎',p:'¥3'},{e:'🌭',n:'香肠',d:'烟熏味',p:'¥5'}],
+   rs:[{nm:'夜猫子',sc:'财经大学',tx:'深夜复习回来暖一暖，老板超好！'}],
+   mt:['tired','hungry'],heat:5200,rank:5,trend:'up',
+   hotLabel:{text:'凌晨3点还亮灯·大学城守夜人',cls:'hl-late'}},
+  {id:10,nm:'西北拉面馆',e:'🥣',bg:'linear-gradient(135deg,#0A0800 0%,#3D2800 50%,#8B6914 100%)',pBg:'#FFFBF0',r:4.5,rv:223,pN:14,pLb:'¥14/人',w:5,cp:'A',cn:'理工大学附近',ct:'noodle',tgs:['拉面','西北'],bd:['student'],dl:null,hr:'08:00–21:00',hd:false,
+   mn:[{e:'🥣',n:'兰州拉面',d:'清汤牛肉片',p:'¥14'},{e:'🥩',n:'加牛肉',d:'卤牛肉',p:'¥6'}],
+   rs:[{nm:'西北汉子',sc:'理工大学',tx:'拉面筋道，分量足！'}],
+   mt:['hungry','tired','broke'],heat:4600,rank:6,trend:'dn',
+   hotLabel:{text:'手工拉面现场秀·每根都是艺术',cls:'hl-vibe'}},
+  {id:11,nm:'福州鱼丸汤面',e:'🍥',bg:'linear-gradient(135deg,#001A2E 0%,#004A7A 50%,#0088CC 100%)',pBg:'#F0FAFE',r:4.7,rv:134,pN:12,pLb:'¥12/人',w:9,cp:'D',cn:'医科大学附近',ct:'noodle',tgs:['鱼丸','清淡'],bd:['new'],dl:null,hr:'07:00–15:00',hd:false,
+   mn:[{e:'🍥',n:'鱼丸汤面',d:'手打鱼丸',p:'¥12'},{e:'🥬',n:'加青菜',d:'新鲜',p:'¥2'}],
+   rs:[{nm:'闽南味',sc:'医科大学',tx:'汤底超鲜！'}],
+   mt:['tired','hungry'],heat:3800,rank:7,trend:'up',
+   hotLabel:{text:'医科学生考前必喝·清脑补元气',cls:'hl-hidden'}},
+  {id:12,nm:'老北京炸酱面',e:'🥢',bg:'linear-gradient(135deg,#0A0800 0%,#2E2000 50%,#6B4C11 100%)',pBg:'#F0F4FF',r:4.5,rv:156,pN:13,pLb:'¥13/人',w:7,cp:'D',cn:'医科大学附近',ct:'noodle',tgs:['北京','炸酱'],bd:[],dl:null,hr:'10:30–20:00',hd:false,
+   mn:[{e:'🥢',n:'老北京炸酱面',d:'手擀',p:'¥13'},{e:'🥕',n:'京式小菜',d:'萝卜黄瓜丝',p:'¥4'}],
+   rs:[{nm:'小北',sc:'医科大学',tx:'手擀面很有嚼劲。'}],
+   mt:['tired','hungry'],heat:3200,rank:8,trend:'st',
+   hotLabel:{text:'老板娘会算卦·吃完考试必过',cls:'hl-magic'}},
+];
+
+const MR={hungry:'你说你超饿，这家分量出了名的大！',tired:'累了一天，来一碗热乎乎的暖暖胃～',happy:'值得好好犒劳一下自己！',rush:'距离近出餐快，赶时间也能吃好！',spicy:'想吃辣？这家是大学城辣度天花板！',sweet:'今天就该甜甜地犒劳自己 🍡',gather:'好友聚餐首选！氛围和味道都在线！',broke:'月底穷学生必备，便宜又好吃！'};
+const MM={hungry:{cats:['rice','noodle','hotpot']},tired:{cats:['noodle','rice','snack']},happy:{cats:['hotpot','bbq','dessert']},rush:{cats:['western','rice','noodle']},spicy:{cats:['noodle','bbq','hotpot']},sweet:{cats:['dessert']},gather:{cats:['hotpot','bbq','western']},broke:{cats:['noodle','rice','snack']}};
+
+/* ══════════ STATE ══════════ */
+const favs=new Set();
+let mood=null,budget='mid',filt={cat:'all',search:'',sort:'hot'};
+let swipeDeck=[],swipeHistory=[],currentCard=null,startX=0,startY=0,isDragging=false,currentAngle=0;
+let hotCatFilter='all';
+
+/* ══════════ VIEWS ══════════ */
+function sv(nm,idx){
+  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+  document.querySelectorAll('.ntab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.bnav-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('view-'+nm).classList.add('active');
+  document.querySelectorAll('.ntab')[idx]?.classList.add('active');
+  document.getElementById('bn'+idx)?.classList.add('active');
+  if(nm==='explore')re();
+  if(nm==='hot')renderHot();
+  if(nm==='swipe'&&swipeDeck.length===0)initSwipe();
+}
+
+/* ══════════ SWIPE ENGINE ══════════ */
+const SWIPE_COLORS=[
+  'linear-gradient(135deg,#3D0000 0%,#8B1A1A 100%)',
+  'linear-gradient(135deg,#1A0A2E 0%,#9B59B6 100%)',
+  'linear-gradient(135deg,#0D0500 0%,#E53900 100%)',
+  'linear-gradient(135deg,#001A2E 0%,#0088CC 100%)',
+  'linear-gradient(135deg,#0A0800 0%,#6B4C11 100%)',
+  'linear-gradient(135deg,#1A0008 0%,#CC0044 100%)',
+];
+
+function initSwipe(){
+  swipeDeck=[...D].sort(()=>Math.random()-.5);
+  swipeHistory=[];
+  renderSwipeStack();
+}
+
+function renderSwipeStack(){
+  const stack=document.getElementById('cardStack');
+  // Remove empty state if present
+  const empty=document.getElementById('swipeEmpty');
+  if(empty)empty.remove();
+
+  if(swipeDeck.length===0){
+    stack.innerHTML=`<div class="swipe-empty" id="swipeEmpty">
+      <div class="ei">😋</div>
+      <h3>全部看完啦！</h3>
+      <p>你的食欲已经被摸透</p>
+      <button class="reset-btn" onclick="initSwipe()">🔄 再来一轮</button>
+    </div>`;
+    return;
+  }
+
+  const visible=swipeDeck.slice(0,3);
+  stack.innerHTML=visible.map((r,i)=>{
+    const cls=i===0?'is-top':i===1?'is-second':'is-third';
+    return`<div class="food-card ${cls}" id="card-${r.id}" data-id="${r.id}">
+      <div class="card-bg" style="background:${r.bg}">
+        <div class="card-food-emoji">${r.e}</div>
+        <div class="card-noise"></div>
+        <div class="card-gradient"></div>
+        <div class="card-info">
+          <div class="card-restaurant">${r.nm}</div>
+          <div class="card-chips">
+            <span class="cchip cc-w">⭐ ${r.r}</span>
+            <span class="cchip cc-g">📍 ${r.w}分钟</span>
+            <span class="cchip cc-y">${r.pLb}</span>
+            ${r.hd?`<span class="cchip cc-r">🏷 ${r.dl}</span>`:''}
+          </div>
+          <div class="card-tags-row">${r.tgs.map(t=>`<span class="ctag"># ${t}</span>`).join(' ')}</div>
+        </div>
+        <div class="vote-overlay vote-yes"><div class="vote-label">想吃！</div></div>
+        <div class="vote-overlay vote-no"><div class="vote-label">Pass</div></div>
+      </div>
+    </div>`;
+  }).join('');
+
+  attachSwipeEvents();
+}
+
+function attachSwipeEvents(){
+  const card=document.querySelector('.food-card.is-top');
+  if(!card)return;
+  currentCard=card;
+
+  card.addEventListener('mousedown',dragStart);
+  card.addEventListener('touchstart',dragStart,{passive:true});
+  document.addEventListener('mousemove',dragMove);
+  document.addEventListener('touchmove',dragMove,{passive:true});
+  document.addEventListener('mouseup',dragEnd);
+  document.addEventListener('touchend',dragEnd);
+}
+
+function detachEvents(){
+  document.removeEventListener('mousemove',dragMove);
+  document.removeEventListener('touchmove',dragMove);
+  document.removeEventListener('mouseup',dragEnd);
+  document.removeEventListener('touchend',dragEnd);
+}
+
+function getX(e){return e.touches?e.touches[0].clientX:e.clientX;}
+function getY(e){return e.touches?e.touches[0].clientY:e.clientY;}
+
+function dragStart(e){
+  isDragging=true;
+  startX=getX(e);startY=getY(e);
+  if(currentCard)currentCard.style.transition='none';
+}
+
+function dragMove(e){
+  if(!isDragging||!currentCard)return;
+  const dx=getX(e)-startX;
+  const dy=getY(e)-startY;
+  const rot=dx*0.12;
+  currentCard.style.transform=`translateX(${dx}px) translateY(${dy*.3}px) rotate(${rot}deg)`;
+  const pct=Math.min(Math.abs(dx)/120,1);
+  const yesOv=currentCard.querySelector('.vote-yes');
+  const noOv=currentCard.querySelector('.vote-no');
+  if(dx>0){yesOv.style.opacity=pct;noOv.style.opacity=0;}
+  else{noOv.style.opacity=pct;yesOv.style.opacity=0;}
+}
+
+function dragEnd(e){
+  if(!isDragging||!currentCard)return;
+  isDragging=false;
+  const dx=getX(e)-startX;
+  detachEvents();
+  if(Math.abs(dx)>80){
+    flyOut(dx>0?'right':'left');
+  } else {
+    currentCard.style.transition='transform .35s cubic-bezier(.34,1.56,.64,1)';
+    currentCard.style.transform='';
+    currentCard.querySelector('.vote-yes').style.opacity=0;
+    currentCard.querySelector('.vote-no').style.opacity=0;
+    setTimeout(attachSwipeEvents,350);
+  }
+}
+
+function flyOut(dir){
+  if(!currentCard)return;
+  const id=parseInt(currentCard.dataset.id);
+  const r=D.find(x=>x.id===id);
+  currentCard.style.transition='transform .45s ease, opacity .45s ease';
+  const fly=dir==='right'?'translateX(140%) rotate(30deg)':'translateX(-140%) rotate(-30deg)';
+  currentCard.style.transform=fly;
+  currentCard.style.opacity='0';
+  if(dir==='right'){
+    swipeHistory.push({r,card:currentCard});
+    showMatch(r);
+  } else {
+    swipeHistory.push({r,card:currentCard});
+  }
+  swipeDeck=swipeDeck.filter(x=>x.id!==id);
+  setTimeout(()=>{renderSwipeStack();},420);
+}
+
+function doSwipe(dir){flyOut(dir);}
+
+function undoSwipe(){
+  if(swipeHistory.length===0){toast('没有可以撤回的了 😅');return;}
+  const last=swipeHistory.pop();
+  swipeDeck.unshift(last.r);
+  renderSwipeStack();
+  toast('↩ 已撤回');
+}
+
+function showMatch(r){
+  document.getElementById('matchHero').style.background=r.pBg;
+  document.getElementById('matchHero').querySelector('.match-confetti')||0;
+  // confetti
+  const conf=document.getElementById('confetti');
+  const colors=['#FF6B6B','#FFD93D','#6BCB77','#4D96FF','#C77DFF','#FFA07A'];
+  conf.innerHTML=Array.from({length:20},(_,i)=>{
+    const c=colors[i%colors.length];
+    const l=Math.random()*100;
+    const delay=Math.random()*0.8;
+    return`<div class="confetti-dot" style="left:${l}%;background:${c};animation-delay:${delay}s;width:${6+Math.random()*6}px;height:${6+Math.random()*6}px;border-radius:${Math.random()>.5?'50%':'2px'}"></div>`;
+  }).join('');
+  document.getElementById('matchHero').innerHTML=`<div class="match-confetti" id="confetti">${conf.innerHTML}</div><span style="font-size:80px;position:relative;z-index:2">${r.e}</span>`;
+  document.getElementById('matchName').textContent=r.nm;
+  document.getElementById('matchDetails').innerHTML=`
+    <div class="mdet"><div class="mdet-val">${r.pLb}</div><div class="mdet-lbl">人均价格</div></div>
+    <div class="mdet"><div class="mdet-val">📍 ${r.w}分钟</div><div class="mdet-lbl">步行距离</div></div>
+    <div class="mdet"><div class="mdet-val">⭐ ${r.r}</div><div class="mdet-lbl">学生评分</div></div>
+    <div class="mdet"><div class="mdet-val">${r.hr.split('–')[0]}</div><div class="mdet-lbl">开门时间</div></div>
+  `;
+  document.getElementById('matchPopup').classList.add('open');
+}
+
+function closeMatch(){document.getElementById('matchPopup').classList.remove('open');}
+
+/* ══════════ HOT LIST ══════════ */
+function hcFilter(el){
+  document.querySelectorAll('#hotCats .hcat').forEach(c=>c.classList.remove('active'));
+  el.classList.add('active');
+  hotCatFilter=el.dataset.hc;
+  renderHot();
+}
+
+function renderHot(){
+  let list=[...D];
+  if(hotCatFilter!=='all')list=list.filter(r=>r.ct===hotCatFilter||r.ct===hotCatFilter);
+  list.sort((a,b)=>b.heat-a.heat);
+  const maxHeat=list[0]?.heat||1;
+  document.getElementById('hotList').innerHTML=list.map((r,i)=>{
+    const rank=i+1;
+    const rankClass=rank===1?'rank-1':rank===2?'rank-2':rank===3?'rank-3':'rank-n';
+    const rankNum=rank<=3?`<div class="rank-num ${rankClass}">${rank<=3?['🥇','🥈','🥉'][rank-1]:rank}</div>`:
+      `<div class="rank-num rank-n">${rank}</div>`;
+    const arr=r.trend==='up'?'<div class="rank-arrow arr-up">▲</div>':r.trend==='dn'?'<div class="rank-arrow arr-dn">▼</div>':'<div class="rank-arrow arr-st">—</div>';
+    const heatPct=Math.round(r.heat/maxHeat*100);
+    const heatFmt=r.heat>=10000?`${(r.heat/10000).toFixed(1)}万`:`${(r.heat/1000).toFixed(1)}k`;
+    return`<div class="hot-item" onclick="od(${r.id})">
+      <div class="rank">${rankNum}${arr}</div>
+      <div class="hot-emoji">${r.e}</div>
+      <div class="hot-info">
+        <div class="hot-name">${r.nm}</div>
+        <div class="hot-label ${r.hotLabel.cls}">${r.hotLabel.text}</div>
+        <div class="hot-sub">
+          <span>⭐ ${r.r}</span>
+          <span>📍 ${r.w}min</span>
+          <span>${r.pLb}</span>
+          ${r.hd?`<span style="color:var(--coral)">🏷 ${r.dl}</span>`:''}
+        </div>
+      </div>
+      <div class="hot-right">
+        <div class="hot-score">${r.r}</div>
+        <div class="hot-heat">${heatFmt} 热度</div>
+        <div class="trending-bar"><div class="trending-fill" style="width:${heatPct}%"></div></div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+/* ══════════ HOME ENGINE ══════════ */
+function pm(el){document.querySelectorAll('.mood-card').forEach(c=>c.classList.remove('sel'));el.classList.add('sel');mood=el.dataset.mood;}
+function pb(el){document.querySelectorAll('.bpill').forEach(p=>p.classList.remove('active'));el.classList.add('active');budget=el.dataset.b;}
+function getRec(){
+  const a=document.getElementById('resArea');a.style.display='block';
+  a.innerHTML='<div class="ldots"><span></span><span></span><span></span></div>';
+  setTimeout(()=>{
+    let pool=[...D];
+    if(budget==='low')pool=pool.filter(r=>r.pN<=15);
+    else if(budget==='mid')pool=pool.filter(r=>r.pN>15&&r.pN<=30);
+    else if(budget==='high')pool=pool.filter(r=>r.pN>30);
+    if(mood&&MM[mood]){const mp=pool.filter(r=>r.mt.includes(mood));if(mp.length)pool=mp;}
+    if(!pool.length)pool=[...D];
+    showRes(pool[Math.floor(Math.random()*pool.length)]);
+  },800);
+}
+function showRes(r){
+  const a=document.getElementById('resArea');
+  const reason=mood?(MR[mood]||'根据你的偏好，这家最适合！'):'随机推荐一家高分餐厅！';
+  a.innerHTML=`<div class="result-card">
+    <div class="res-hero" style="background:${r.pBg}"><span style="font-size:80px">${r.e}</span><div class="winner-b">🎯 今日推荐</div></div>
+    <div class="res-body">
+      <div class="res-name">${r.nm}</div>
+      <div class="res-meta">
+        <span class="rchip rc-y">⭐ ${r.r}</span>
+        <span class="rchip rc-g">💰 ${r.pLb}</span>
+        <span class="rchip rc-b">📍 步行${r.w}分钟</span>
+        ${r.hd?`<span class="rchip rc-r">🏷 ${r.dl}</span>`:''}
+      </div>
+      <div class="res-reason">💡 ${reason}<br><span style="font-size:11px;color:#aaa">📌 ${r.cn} · ${r.hr}</span></div>
+      <div class="res-btns">
+        <button class="ra-btn ra-s" onclick="od(${r.id})">查看详情</button>
+        <button class="ra-btn ra-b" onclick="getRec()">🎲 再来一个</button>
+        <button class="ra-btn ra-p" onclick="toast('🗺 导航已启动！')">📍 出发</button>
+      </div>
+    </div>
+  </div>`;
+}
+
+/* ══════════ EXPLORE ══════════ */
+function re(){
+  let list=[...D];
+  if(filt.cat!=='all')list=list.filter(r=>r.ct===filt.cat);
+  if(filt.search)list=list.filter(r=>r.nm.includes(filt.search)||r.tgs.join().includes(filt.search));
+  if(filt.sort==='rating')list.sort((a,b)=>b.r-a.r);
+  else if(filt.sort==='price_asc')list.sort((a,b)=>a.pN-b.pN);
+  else if(filt.sort==='dist')list.sort((a,b)=>a.w-b.w);
+  else list.sort((a,b)=>b.heat-a.heat);
+  document.getElementById('expCount').textContent=list.length+' 家';
+  document.getElementById('expGrid').innerHTML=list.map(ch).join('')||'<div style="grid-column:1/-1;text-align:center;padding:40px;color:var(--muted)">没有找到 🥲</div>';
+}
+function fc(el){document.querySelectorAll('#catFilter .fchip').forEach(c=>c.classList.remove('active'));el.classList.add('active');filt.cat=el.dataset.cat;re();}
+function hs(v){filt.search=v;re();}
+function hso(v){filt.sort=v;re();}
+function onCampus(){re();}
+function ch(r){
+  const bm={hot:'rb-h',new:'rb-n',deal:'rb-d',student:'rb-s'},bt={hot:'🔥',new:'✨',deal:'🏷',student:'🎓'};
+  return`<div class="rcard" onclick="od(${r.id})">
+    <div class="rc-img" style="background:${r.pBg}"><span style="font-size:60px">${r.e}</span>
+      <div class="rc-badges">${r.bd.map(b=>`<span class="rbadge ${bm[b]}">${bt[b]}</span>`).join('')}</div>
+      <button class="ftog" onclick="tf(${r.id},this,event)">${favs.has(r.id)?'❤️':'🤍'}</button>
+    </div>
+    <div class="rc-body">
+      <div class="rc-name">${r.nm}<span class="rc-score">⭐${r.r}</span></div>
+      <div class="rc-tags">${r.tgs.map(t=>`<span class="rtag">${t}</span>`).join('')}</div>
+      <div class="rc-info"><span>📍 ${r.w}分钟</span><span>💬 ${r.rv}评</span><span>${r.pLb}</span></div>
+      ${r.hd?`<div class="rc-deal">🏷 ${r.dl}</div>`:''}
+      <div class="rc-foot"><span class="rcampus">${r.cn}</span>
+        <div class="rc-btns">
+          <button class="rbtn rbtn-s" onclick="event.stopPropagation();toast('🗺 导航！')">导航</button>
+          <button class="rbtn rbtn-p" onclick="event.stopPropagation();od(${r.id})">详情</button>
+        </div>
+      </div>
+    </div>
+  </div>`;
+}
+
+/* ══════════ FAV ══════════ */
+function tf(id,btn,ev){
+  ev.stopPropagation();
+  if(favs.has(id)){favs.delete(id);btn.textContent='🤍';toast('已取消收藏');}
+  else{favs.add(id);btn.textContent='❤️';toast('已加入收藏 ❤️');}
+}
+
+/* ══════════ DRAWER ══════════ */
+function od(id){
+  const r=D.find(x=>x.id===id);
+  document.getElementById('drhero').style.background=r.pBg;
+  document.getElementById('drhero').innerHTML=`<span style="font-size:88px">${r.e}</span>`;
+  document.getElementById('drbody').innerHTML=`
+    <div class="drtitle">${r.nm}</div>
+    <div class="drchips">
+      <span class="drc drc-y">⭐ ${r.r}（${r.rv}评）</span>
+      <span class="drc drc-g">${r.pLb}</span>
+      <span class="drc drc-b">📍 步行${r.w}分钟</span>
+      <span class="drc drc-r">🕐 ${r.hr}</span>
+    </div>
+    ${r.hd?`<div class="dr-deal">🏷 今日学生专属：${r.dl}（凭学生证）</div>`:''}
+    <div class="hot-label ${r.hotLabel.cls}" style="margin-bottom:14px;display:inline-block">${r.hotLabel.text}</div>
+    <div class="drsec"><h4>🍽️ 热门菜品</h4>
+      ${r.mn.map(m=>`<div class="mrow"><span class="memoji">${m.e}</span><div class="minfo"><div class="mname">${m.n}</div><div class="mdesc">${m.d}</div></div><div class="mprice">${m.p}</div></div>`).join('')}
+    </div>
+    <div class="drsec"><h4>💬 同学评价</h4>
+      ${r.rs.map(rv=>`<div class="rev-item"><div class="rev-head"><div class="rev-av">${rv.nm[0]}</div><div><div class="rev-nm">${rv.nm}</div><div class="rev-sc">${rv.sc}</div></div></div><div class="rev-tx">${rv.tx}</div></div>`).join('')}
+    </div>`;
+  document.getElementById('overlay').classList.add('open');
+}
+function cd(e){if(!e||e.target===document.getElementById('overlay'))document.getElementById('overlay').classList.remove('open');}
+
+/* ══════════ TOAST ══════════ */
+let tt;
+function toast(msg){
+  const el=document.getElementById('toast');el.textContent=msg;el.classList.add('show');
+  clearTimeout(tt);tt=setTimeout(()=>el.classList.remove('show'),2600);
+}
+
+/* ══════════ INIT ══════════ */
+initSwipe();
+renderHot();
+</script>
+</body>
+</html>
