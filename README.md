@@ -4,6 +4,11 @@
 
 **🔗 在线体验：<https://xingyue-zheng.github.io/food-map/>**
 
+|  |  |
+|---|---|
+| ![帮我选](docs/screenshot-home.png) | ![热搜榜](docs/screenshot-hot.png) |
+| **帮我选** — 选心情和预算，直接给一个结果 | **热搜榜** — 热度排行与学生口碑标签 |
+
 ---
 
 ## 项目背景
