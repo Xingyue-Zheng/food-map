@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#FFFFFF">
-<title>今天吃什么 · 大学城美食地图</title>
+<title>今天吃什么 · 南京义乌美食街</title>
 <style>
 /* ═══════════════════════════════════════
    DESIGN TOKENS
@@ -88,7 +88,7 @@ button{cursor:pointer;border:none;background:none;}
 .sec-label{font-size:12px;font-weight:700;color:var(--t3);letter-spacing:.06em;margin-bottom:12px;}
 
 /* ═══════════════════════════════════════
-   顶栏 — 只放品牌 + 校区，导航全部交给底栏
+   顶栏 — 只放品牌 + 逛吃分区，导航全部交给底栏
 ═══════════════════════════════════════ */
 nav{
   position:fixed;top:0;left:0;right:0;z-index:100;height:var(--nav-h);
@@ -547,13 +547,13 @@ nav{
 <!-- ═══ 顶栏 ═══ -->
 <nav>
   <div class="logo"><div class="logo-b">🍜</div>今天吃什么</div>
-  <select class="campus-sel" id="campusSel" onchange="onCampus()" aria-label="选择校区">
-    <option value="all">全部校区</option>
-    <option value="A">理工大学</option>
-    <option value="B">财经大学</option>
-    <option value="C">师范大学</option>
-    <option value="D">医科大学</option>
-    <option value="E">艺术学院</option>
+  <select class="campus-sel" id="campusSel" onchange="onCampus()" aria-label="选择逛吃分区">
+    <option value="all">整条街</option>
+    <option value="A">街口·地铁出口</option>
+    <option value="B">奶茶一条街</option>
+    <option value="C">本土连锁区</option>
+    <option value="D">小吃中段</option>
+    <option value="E">街尾·尽头</option>
   </select>
 </nav>
 
@@ -562,7 +562,7 @@ nav{
   <div class="scroll"><div class="wrap">
     <div class="hero-head">
       <h1>今天，<em>吃什么</em>好？</h1>
-      <p>大学城 <span id="homeCount">12</span> 家餐厅 · 选择困难症救星</p>
+      <p>义乌美食街 <span id="homeCount">22</span> 家店 · 选择困难症救星</p>
     </div>
     <div class="panel">
       <div class="sec-label">告诉我你现在的状态</div>
@@ -579,9 +579,9 @@ nav{
       <div class="budget-row">
         <span class="blabel">预算</span>
         <div class="bpills" id="bpills">
-          <button class="bpill" data-b="low" onclick="pb(this)">¥15 以下</button>
-          <button class="bpill active" data-b="mid" onclick="pb(this)">¥15–30</button>
-          <button class="bpill" data-b="high" onclick="pb(this)">¥30 以上</button>
+          <button class="bpill" data-b="low" onclick="pb(this)">¥10 以下</button>
+          <button class="bpill active" data-b="mid" onclick="pb(this)">¥10–18</button>
+          <button class="bpill" data-b="high" onclick="pb(this)">¥18 以上</button>
           <button class="bpill" data-b="any" onclick="pb(this)">随便</button>
         </div>
       </div>
@@ -611,33 +611,33 @@ nav{
 <div class="view" id="view-hot">
   <div class="scroll"><div class="wrap">
     <div class="hot-header">
-      <h2>大学城食堂热搜榜</h2>
-      <p>实时热度 · 同学口碑 · 本周爆单排行</p>
+      <h2>义乌美食街热搜榜</h2>
+      <p>实时热度 · 江宁大学城学生口碑 · 本周爆单排行</p>
       <div class="hot-update"><span class="live-dot"></span>刚刚更新</div>
     </div>
 
     <div class="topic-section">
       <div class="sec-label">本周热议话题</div>
       <div class="topic-cloud">
-        <button class="topic-tag" onclick="toast('已为你筛选相关餐厅')">🌶 辣到哭着吃完</button>
-        <button class="topic-tag" onclick="toast('已为你筛选相关餐厅')">📚 复习神器补脑餐</button>
-        <button class="topic-tag" onclick="toast('已为你筛选相关餐厅')">🌿 素食星人也能吃</button>
-        <button class="topic-tag" onclick="toast('已为你筛选相关餐厅')">🌙 深夜 2 点还营业</button>
-        <button class="topic-tag" onclick="toast('已为你筛选相关餐厅')">🏮 老板塞满到溢出</button>
-        <button class="topic-tag" onclick="toast('已为你筛选相关餐厅')">📷 出片率极高</button>
-        <button class="topic-tag" onclick="toast('已为你筛选相关餐厅')">🎓 毕业季必打卡</button>
-        <button class="topic-tag" onclick="toast('已为你筛选相关餐厅')">💌 带对象必成功</button>
+        <button class="topic-tag" onclick="toast('已为你筛选相关店铺')">💸 人均 30 吃到扶墙</button>
+      <button class="topic-tag" onclick="toast('已为你筛选相关店铺')">🧋 二十多家奶茶挑花眼</button>
+      <button class="topic-tag" onclick="toast('已为你筛选相关店铺')">🥚 南京黑暗料理挑战</button>
+      <button class="topic-tag" onclick="toast('已为你筛选相关店铺')">🍡 排队最长的那家年糕</button>
+      <button class="topic-tag" onclick="toast('已为你筛选相关店铺')">🏮 跟着学生排队准没错</button>
+      <button class="topic-tag" onclick="toast('已为你筛选相关店铺')">🎟 团购券先领再下单</button>
+      <button class="topic-tag" onclick="toast('已为你筛选相关店铺')">🚩 南京本土老字号</button>
+      <button class="topic-tag" onclick="toast('已为你筛选相关店铺')">🌛 过年扑空待补课</button>
       </div>
     </div>
 
     <div class="seg hot-cats" id="hotCats">
       <button class="seg-item active" data-hc="all" onclick="hcFilter(this)">全部</button>
-      <button class="seg-item" data-hc="rice" onclick="hcFilter(this)">快餐</button>
-      <button class="seg-item" data-hc="noodle" onclick="hcFilter(this)">面食</button>
-      <button class="seg-item" data-hc="bbq" onclick="hcFilter(this)">烧烤</button>
-      <button class="seg-item" data-hc="hotpot" onclick="hcFilter(this)">火锅</button>
-      <button class="seg-item" data-hc="dessert" onclick="hcFilter(this)">甜品</button>
-      <button class="seg-item" data-hc="snack" onclick="hcFilter(this)">夜宵</button>
+      <button class="seg-item" data-hc="snack" onclick="hcFilter(this)">街边小吃</button>
+      <button class="seg-item" data-hc="bbq" onclick="hcFilter(this)">烧烤炸串</button>
+      <button class="seg-item" data-hc="noodle" onclick="hcFilter(this)">粉面</button>
+      <button class="seg-item" data-hc="drink" onclick="hcFilter(this)">奶茶</button>
+      <button class="seg-item" data-hc="bakery" onclick="hcFilter(this)">糕点</button>
+      <button class="seg-item" data-hc="rice" onclick="hcFilter(this)">管饱主食</button>
     </div>
     <div class="hot-list" id="hotList"></div>
   </div></div>
@@ -648,7 +648,7 @@ nav{
   <div class="scroll"><div class="wrap wrap--wide">
     <div class="sec-head">
       <div class="sec-title">探索美食</div>
-      <span class="sec-count" id="expCount">12 家</span>
+      <span class="sec-count" id="expCount">22 家</span>
     </div>
     <div class="search-row">
       <div class="si-wrap"><span>🔍</span><input type="text" placeholder="搜索餐厅、菜品、口味…" oninput="hs(this.value)" aria-label="搜索"></div>
@@ -661,13 +661,12 @@ nav{
     </div>
     <div class="seg filter-row" id="catFilter">
       <button class="seg-item active" data-cat="all"     onclick="fc(this)">全部</button>
-      <button class="seg-item" data-cat="rice"    onclick="fc(this)">快餐</button>
-      <button class="seg-item" data-cat="noodle"  onclick="fc(this)">面条</button>
-      <button class="seg-item" data-cat="bbq"     onclick="fc(this)">烧烤</button>
-      <button class="seg-item" data-cat="hotpot"  onclick="fc(this)">火锅</button>
-      <button class="seg-item" data-cat="western" onclick="fc(this)">西式</button>
-      <button class="seg-item" data-cat="dessert" onclick="fc(this)">甜品</button>
-      <button class="seg-item" data-cat="snack"   onclick="fc(this)">夜宵</button>
+      <button class="seg-item" data-cat="snack"   onclick="fc(this)">街边小吃</button>
+      <button class="seg-item" data-cat="bbq"     onclick="fc(this)">烧烤炸串</button>
+      <button class="seg-item" data-cat="noodle"  onclick="fc(this)">粉面</button>
+      <button class="seg-item" data-cat="drink"   onclick="fc(this)">奶茶</button>
+      <button class="seg-item" data-cat="bakery"  onclick="fc(this)">糕点</button>
+      <button class="seg-item" data-cat="rice"    onclick="fc(this)">管饱主食</button>
     </div>
     <div class="cards-grid" id="expGrid"></div>
   </div></div>
@@ -715,70 +714,129 @@ nav{
 <script>
 /* ══════════ DATA ══════════ */
 const D=[
-  {id:1,nm:'老四川麻辣烫',e:'🌶️',bg:'linear-gradient(135deg,#3D0000 0%,#8B1A1A 50%,#C0392B 100%)',pBg:'#FFF0F0',r:4.8,rv:342,pN:12,pLb:'¥12/人',w:3,cp:'A',cn:'理工大学附近',ct:'noodle',tgs:['麻辣','自选','量大'],bd:['hot','deal'],dl:'学生8折',hr:'10:00–22:00',hd:true,
-   mn:[{e:'🥕',n:'经典麻辣烫',d:'20+种菜品',p:'¥12起'},{e:'🥚',n:'溏心蛋',d:'必点',p:'¥2'}],
-   rs:[{nm:'阿涛',sc:'理工大学',tx:'分量足，辣度自选，每周必去！'}],
-   mt:['hungry','spicy','broke'],heat:9820,rank:1,trend:'up',
-   hotLabel:{text:'辣界天花板·不哭不算赢',cls:'hl-fire'}},
-  {id:2,nm:'外婆家黄焖鸡',e:'🍗',bg:'linear-gradient(135deg,#2D1A00 0%,#7A4500 50%,#D4A017 100%)',pBg:'#FFFBF0',r:4.6,rv:289,pN:15,pLb:'¥15/人',w:5,cp:'B',cn:'财经大学附近',ct:'rice',tgs:['黄焖','香辣'],bd:['hot'],dl:null,hr:'09:00–21:00',hd:false,
-   mn:[{e:'🍗',n:'黄焖鸡米饭',d:'招牌嫩滑',p:'¥15'},{e:'🥦',n:'加菜',d:'时蔬',p:'¥3起'}],
-   rs:[{nm:'小明',sc:'财经大学',tx:'鸡肉超嫩，汤汁拌饭绝了！'}],
-   mt:['hungry','tired','broke'],heat:7640,rank:2,trend:'up',
-   hotLabel:{text:'打工人午饭续命神器',cls:'hl-soul'}},
-  {id:3,nm:'茶颜悦色',e:'🧋',bg:'linear-gradient(135deg,#1A0A2E 0%,#4A1580 50%,#9B59B6 100%)',pBg:'#F8F0FF',r:4.9,rv:512,pN:22,pLb:'¥22/人',w:2,cp:'C',cn:'师范大学附近',ct:'dessert',tgs:['奶茶','网红'],bd:['hot','new','deal'],dl:'买一送一今天限定',hr:'08:30–22:30',hd:true,
-   mn:[{e:'🧋',n:'幽兰拿铁',d:'招牌',p:'¥22'},{e:'☕',n:'声声乌龙',d:'清爽',p:'¥19'}],
-   rs:[{nm:'晴天',sc:'师范大学',tx:'幽兰拿铁必点！'}],
-   mt:['sweet','happy','gather'],heat:11200,rank:1,trend:'up',
-   hotLabel:{text:'排队2小时·一杯治愈期末',cls:'hl-hype'}},
-  {id:4,nm:'重庆小面王',e:'🍜',bg:'linear-gradient(135deg,#1A0000 0%,#6B0000 40%,#CC2200 100%)',pBg:'#F0FFF4',r:4.7,rv:198,pN:10,pLb:'¥10/人',w:4,cp:'A',cn:'理工大学附近',ct:'noodle',tgs:['重庆','麻辣'],bd:['student'],dl:null,hr:'06:30–14:00',hd:false,
-   mn:[{e:'🍜',n:'重庆小面',d:'正宗麻辣',p:'¥10'},{e:'🥩',n:'加牛肉',d:'卤牛肉',p:'¥5'}],
-   rs:[{nm:'渝味',sc:'理工大学',tx:'早餐一碗满血复活！'}],
-   mt:['hungry','rush','broke','spicy'],heat:6300,rank:3,trend:'st',
-   hotLabel:{text:'¥10干掉所有外卖·性价比之王',cls:'hl-cult'}},
-  {id:5,nm:'夜市烤串总店',e:'🍢',bg:'linear-gradient(135deg,#0D0A00 0%,#3D2200 40%,#8B4513 100%)',pBg:'#FFF5F0',r:4.4,rv:421,pN:28,pLb:'¥28/人',w:6,cp:'E',cn:'艺术学院附近',ct:'bbq',tgs:['烧烤','夜宵','聚餐'],bd:['hot','deal'],dl:'工作日9折',hr:'17:00–02:00',hd:true,
-   mn:[{e:'🥩',n:'牛肉串',d:'外焦里嫩',p:'¥5/串'},{e:'🌽',n:'烤玉米',d:'甜糯',p:'¥6'}],
-   rs:[{nm:'阿杰',sc:'艺术学院',tx:'夜宵来这里！'}],
-   mt:['gather','happy','spicy'],heat:8950,rank:2,trend:'up',
-   hotLabel:{text:'凌晨1点最有烟火气的地方',cls:'hl-late'}},
-  {id:6,nm:'蜀道难火锅',e:'🍲',bg:'linear-gradient(135deg,#1A0008 0%,#660020 50%,#CC0044 100%)',pBg:'#FFF0F5',r:4.6,rv:267,pN:45,pLb:'¥45/人',w:8,cp:'B',cn:'财经大学附近',ct:'hotpot',tgs:['火锅','聚餐','麻辣'],bd:['student'],dl:null,hr:'11:00–23:00',hd:false,
-   mn:[{e:'🥩',n:'毛肚',d:'脆嫩弹牙',p:'¥28'},{e:'🧀',n:'鸭血',d:'嫩滑',p:'¥8'}],
-   rs:[{nm:'川妹子',sc:'财经大学',tx:'汤底正宗，聚餐好地方！'}],
-   mt:['gather','happy','spicy'],heat:5800,rank:4,trend:'dn',
-   hotLabel:{text:'考完试哭着去庆祝的地方',cls:'hl-magic'}},
-  {id:7,nm:'肯德基大学城店',e:'🍔',bg:'linear-gradient(135deg,#0D0500 0%,#5C2000 50%,#E53900 100%)',pBg:'#F0FFF4',r:4.2,rv:893,pN:25,pLb:'¥25/人',w:1,cp:'C',cn:'师范大学附近',ct:'western',tgs:['快餐','炸鸡'],bd:['deal'],dl:'校园专属券-5元',hr:'07:00–23:00',hd:true,
-   mn:[{e:'🍗',n:'香辣鸡腿堡',d:'招牌',p:'¥19'},{e:'🍟',n:'薯条',d:'经典',p:'¥12'}],
-   rs:[{nm:'快乐肥宅',sc:'师范大学',tx:'早餐方便，优惠券省不少。'}],
-   mt:['rush','broke'],heat:12400,rank:1,trend:'st',
-   hotLabel:{text:'大学城人流量No.1·永远有人',cls:'hl-hype'}},
-  {id:8,nm:'甜品站杨枝甘露',e:'🍡',bg:'linear-gradient(135deg,#1A0F2E 0%,#6B2FA0 50%,#E040FB 100%)',pBg:'#FAF0FF',r:4.8,rv:305,pN:18,pLb:'¥18/人',w:3,cp:'E',cn:'艺术学院附近',ct:'dessert',tgs:['甜品','芒果'],bd:['hot','new','deal'],dl:'学生立减2元',hr:'12:00–22:00',hd:true,
-   mn:[{e:'🥭',n:'杨枝甘露',d:'芒果西柚椰浆',p:'¥18'},{e:'🍮',n:'班戟',d:'厚煎饼夹芒果',p:'¥15'}],
-   rs:[{nm:'学姐',sc:'艺术学院',tx:'颜值口感都满分！'}],
-   mt:['sweet','happy'],heat:7100,rank:2,trend:'up',
-   hotLabel:{text:'带对象必成功·成功率87%',cls:'hl-magic'}},
-  {id:9,nm:'深夜食堂关东煮',e:'🥘',bg:'linear-gradient(135deg,#050510 0%,#1A1A4E 50%,#2E4090 100%)',pBg:'#F0FFF4',r:4.6,rv:178,pN:15,pLb:'¥15/人',w:2,cp:'B',cn:'财经大学附近',ct:'snack',tgs:['关东煮','夜宵'],bd:['hot'],dl:null,hr:'16:00–01:30',hd:false,
-   mn:[{e:'🥚',n:'溏心蛋',d:'最受欢迎',p:'¥3'},{e:'🌭',n:'香肠',d:'烟熏味',p:'¥5'}],
-   rs:[{nm:'夜猫子',sc:'财经大学',tx:'深夜复习回来暖一暖，老板超好！'}],
-   mt:['tired','hungry'],heat:5200,rank:5,trend:'up',
-   hotLabel:{text:'凌晨3点还亮灯·大学城守夜人',cls:'hl-late'}},
-  {id:10,nm:'西北拉面馆',e:'🥣',bg:'linear-gradient(135deg,#0A0800 0%,#3D2800 50%,#8B6914 100%)',pBg:'#FFFBF0',r:4.5,rv:223,pN:14,pLb:'¥14/人',w:5,cp:'A',cn:'理工大学附近',ct:'noodle',tgs:['拉面','西北'],bd:['student'],dl:null,hr:'08:00–21:00',hd:false,
-   mn:[{e:'🥣',n:'兰州拉面',d:'清汤牛肉片',p:'¥14'},{e:'🥩',n:'加牛肉',d:'卤牛肉',p:'¥6'}],
-   rs:[{nm:'西北汉子',sc:'理工大学',tx:'拉面筋道，分量足！'}],
-   mt:['hungry','tired','broke'],heat:4600,rank:6,trend:'dn',
-   hotLabel:{text:'手工拉面现场秀·每根都是艺术',cls:'hl-vibe'}},
-  {id:11,nm:'福州鱼丸汤面',e:'🍥',bg:'linear-gradient(135deg,#001A2E 0%,#004A7A 50%,#0088CC 100%)',pBg:'#F0FAFE',r:4.7,rv:134,pN:12,pLb:'¥12/人',w:9,cp:'D',cn:'医科大学附近',ct:'noodle',tgs:['鱼丸','清淡'],bd:['new'],dl:null,hr:'07:00–15:00',hd:false,
-   mn:[{e:'🍥',n:'鱼丸汤面',d:'手打鱼丸',p:'¥12'},{e:'🥬',n:'加青菜',d:'新鲜',p:'¥2'}],
-   rs:[{nm:'闽南味',sc:'医科大学',tx:'汤底超鲜！'}],
-   mt:['tired','hungry'],heat:3800,rank:7,trend:'up',
-   hotLabel:{text:'医科学生考前必喝·清脑补元气',cls:'hl-hidden'}},
-  {id:12,nm:'老北京炸酱面',e:'🥢',bg:'linear-gradient(135deg,#0A0800 0%,#2E2000 50%,#6B4C11 100%)',pBg:'#F0F4FF',r:4.5,rv:156,pN:13,pLb:'¥13/人',w:7,cp:'D',cn:'医科大学附近',ct:'noodle',tgs:['北京','炸酱'],bd:[],dl:null,hr:'10:30–20:00',hd:false,
-   mn:[{e:'🥢',n:'老北京炸酱面',d:'手擀',p:'¥13'},{e:'🥕',n:'京式小菜',d:'萝卜黄瓜丝',p:'¥4'}],
-   rs:[{nm:'小北',sc:'医科大学',tx:'手擀面很有嚼劲。'}],
-   mt:['tired','hungry'],heat:3200,rank:8,trend:'st',
-   hotLabel:{text:'老板娘会算卦·吃完考试必过',cls:'hl-magic'}},
+  /* ── A 街口·地铁2号口临街 ── */
+  {id:1,nm:'临街炸酥肉',e:'🍤',bg:'linear-gradient(135deg,#1A0D00 0%,#6B3A00 50%,#D2791E 100%)',pBg:'#FFF4EC',r:4.6,rv:268,pN:10,pLb:'¥10/小份',w:1,cp:'A',cn:'街口·地铁2号口临街',ct:'snack',tgs:['现炸','可加料','逛吃'],bd:['hot'],dl:null,hr:'11:00–22:00',hd:false,
+   mn:[{e:'🍤',n:'炸酥肉',d:'小份起卖',p:'¥10'},{e:'🍄',n:'炸蘑菇',d:'比肉还香',p:'¥8'},{e:'🪷',n:'炸藕',d:'用的老藕·不撒料也甜',p:'¥8'}],
+   rs:[{nm:'阿岑',sc:'南京航空航天大学',tx:'临街两家我都尝了，这家看着干净整洁，调料也更好吃。'}],
+   mt:['hungry','spicy','broke','rush'],heat:8600,rank:1,trend:'up',
+   hotLabel:{text:'炸蘑菇比肉还香·牛皮纸袋拎着逛',cls:'hl-cult'}},
+  {id:2,nm:'烤鸡架（街口第一家）',e:'🍗',bg:'linear-gradient(135deg,#1A0800 0%,#7A2E00 50%,#E0651B 100%)',pBg:'#FFF4EC',r:4.7,rv:394,pN:10,pLb:'¥10/只',w:1,cp:'A',cn:'街口·肯德基旁第一家',ct:'bbq',tgs:['一整只','先炸后烤','撕成块'],bd:['hot','deal'],dl:'一整只 10 元封顶',hr:'15:00–23:00',hd:true,
+   mn:[{e:'🍗',n:'烤鸡架',d:'先炸熟再上烤架撒料·撕成小块装袋',p:'¥10/只'}],
+   rs:[{nm:'成都来的',sc:'南京工程学院',tx:'有点啃烤兔子那感觉，越啃越香，一整只才 10 块。'}],
+   mt:['hungry','broke','spicy','gather'],heat:10300,rank:1,trend:'up',
+   hotLabel:{text:'整只10块·买不了吃亏买不了上当',cls:'hl-cult'}},
+
+  /* ── B 奶茶一条街 ── */
+  {id:3,nm:'小林桃山物语',e:'🍑',bg:'linear-gradient(135deg,#1A0A12 0%,#6B1F3D 50%,#E8799B 100%)',pBg:'#FDF0F5',r:4.7,rv:186,pN:18,pLb:'¥18/人',w:4,cp:'B',cn:'奶茶一条街·泸溪河隔壁',ct:'drink',tgs:['全国首店','日式白桃','冰博克'],bd:['new','hot','deal'],dl:'点评/美团有团购券',hr:'10:00–22:00',hd:true,
+   mn:[{e:'🍑',n:'白桃惊梦',d:'淡淡白桃味·杯底乌龙茶冻',p:'¥18'},{e:'🥛',n:'桃山鲜乳茶',d:'冰博克/明治牛乳',p:'¥20'}],
+   rs:[{nm:'桃子',sc:'中国药科大学',tx:'菜单做成地铁线路图，等号牌是电车站，很有代入感。'}],
+   mt:['sweet','happy','rush'],heat:7900,rank:1,trend:'up',
+   hotLabel:{text:'全国首店·菜单是一张地铁线路图',cls:'hl-vibe'}},
+  {id:4,nm:'圆真真',e:'🧋',bg:'linear-gradient(135deg,#0F0A05 0%,#3D2410 50%,#8B5A2B 100%)',pBg:'#F4F0FA',r:4.8,rv:311,pN:16,pLb:'¥16/人',w:4,cp:'B',cn:'奶茶一条街',ct:'drink',tgs:['南京首店','手搓珍珠','成都来的'],bd:['hot','new','deal'],dl:'点评/美团有团购券',hr:'10:00–22:30',hd:true,
+   mn:[{e:'🧋',n:'真真都有哇',d:'黑/灰/白三种珍珠一杯全给',p:'¥18'},{e:'🍯',n:'黑糖黑珍珠',d:'每日手搓',p:'¥16'}],
+   rs:[{nm:'真真粉',sc:'河海大学江宁校区',tx:'珍珠是每天手搓的，黑糖那款口感跟别家完全不一样。'}],
+   mt:['sweet','happy','gather'],heat:9100,rank:1,trend:'up',
+   hotLabel:{text:'每日手搓三色珍珠·成都爆火品牌',cls:'hl-hype'}},
+  {id:5,nm:'茶海棠',e:'🍵',bg:'linear-gradient(135deg,#0A1410 0%,#1F4A32 50%,#4C9A6B 100%)',pBg:'#F4F0FA',r:4.6,rv:242,pN:17,pLb:'¥17/人',w:4,cp:'B',cn:'奶茶一条街',ct:'drink',tgs:['南京本土','国风','茶颜平替'],bd:['hot','deal'],dl:'点评/美团有团购券',hr:'09:30–22:00',hd:true,
+   mn:[{e:'🍵',n:'招牌国风奶茶',d:'南京本土原创',p:'¥17'}],
+   rs:[{nm:'长沙没去成',sc:'金陵科技学院',tx:'去不了长沙喝茶颜，来一杯茶海棠也挺顶。'}],
+   mt:['sweet','tired','happy'],heat:6400,rank:2,trend:'st',
+   hotLabel:{text:'去不了长沙·就喝一杯茶海棠',cls:'hl-magic'}},
+  {id:6,nm:'蜜雪冰城',e:'🍦',bg:'linear-gradient(135deg,#1A0000 0%,#7A0010 50%,#D42030 100%)',pBg:'#F4F0FA',r:4.3,rv:658,pN:7,pLb:'¥7/人',w:3,cp:'B',cn:'奶茶一条街',ct:'drink',tgs:['平价','连锁','学生价'],bd:['deal','student'],dl:'点评/美团有团购券',hr:'09:00–23:00',hd:true,
+   mn:[{e:'🍋',n:'冰鲜柠檬水',d:'常年 ¥4',p:'¥4'},{e:'🧋',n:'珍珠奶茶',d:'性价比之王',p:'¥7'}],
+   rs:[{nm:'月底选手',sc:'南京工程学院',tx:'这条街二十多家奶茶店，月底还是只敢进这家。'}],
+   mt:['broke','sweet','rush'],heat:8800,rank:1,trend:'st',
+   hotLabel:{text:'¥7封顶·穷学生奶茶自由的底线',cls:'hl-cult'}},
+  {id:7,nm:'泸溪河桃酥',e:'🥮',bg:'linear-gradient(135deg,#140F00 0%,#4A3A08 50%,#A88420 100%)',pBg:'#FCEEF5',r:4.9,rv:423,pN:20,pLb:'¥20/人',w:4,cp:'B',cn:'奶茶一条街·小林桃山物语隔壁',ct:'bakery',tgs:['南京本土','桃酥','伴手礼'],bd:['hot'],dl:null,hr:'09:00–21:30',hd:false,
+   mn:[{e:'🍪',n:'桃酥',d:'不甜不油·面上一层黑芝麻',p:'论斤称'},{e:'🧁',n:'肉松小贝',d:'个头超大·酱料很足',p:'¥7'},{e:'🍓',n:'草莓肉松小贝',d:'新推出',p:'¥8'}],
+   rs:[{nm:'十万',sc:'南京航空航天大学',tx:'我吃过最好吃的桃酥，轻轻一咬特别酥脆；过年出了礼盒装，适合当伴手礼。'}],
+   mt:['sweet','happy','tired'],heat:9600,rank:1,trend:'up',
+   hotLabel:{text:'桃酥天花板·除了鲍师傅就它',cls:'hl-cult'}},
+
+  /* ── C 本土连锁区 ── */
+  {id:8,nm:'喜姐炸串',e:'🍢',bg:'linear-gradient(135deg,#1A0300 0%,#8B1500 50%,#E8401B 100%)',pBg:'#FAEDE2',r:4.7,rv:512,pN:25,pLb:'¥25/人',w:5,cp:'C',cn:'本土连锁区',ct:'bbq',tgs:['南京本土','炸串','秘制酱料'],bd:['hot'],dl:null,hr:'11:00–23:30',hd:false,
+   mn:[{e:'🍗',n:'掌中宝',d:'必点',p:'¥3/串'},{e:'🥓',n:'五花肉',d:'必点',p:'¥3/串'},{e:'🥩',n:'牛肉串',d:'出锅刷秘制酱料',p:'¥4/串'},{e:'🌽',n:'玉米粒',d:'解腻',p:'¥5'}],
+   rs:[{nm:'南京常客',sc:'河海大学江宁校区',tx:'每次来南京必吃，想吃干一点就跟服务员说多炸一会儿。'}],
+   mt:['hungry','spicy','gather','happy'],heat:11200,rank:1,trend:'up',
+   hotLabel:{text:'开遍南京大街小巷·每次来必吃',cls:'hl-hype'}},
+  {id:9,nm:'回味鸭血粉丝汤',e:'🥣',bg:'linear-gradient(135deg,#14000A 0%,#5C0022 50%,#B81D4A 100%)',pBg:'#FFF0E8',r:4.4,rv:587,pN:20,pLb:'¥20/人',w:5,cp:'C',cn:'本土连锁区',ct:'noodle',tgs:['南京本土','鸭血粉丝','汤包'],bd:['hot'],dl:null,hr:'08:00–21:30',hd:false,
+   mn:[{e:'🥣',n:'鸭血粉丝汤',d:'出品稳定·不会踩雷',p:'¥16'},{e:'🥟',n:'汤包',d:'现点现蒸·鲜肉/鲜虾/蟹粉',p:'¥12'},{e:'📦',n:'速食鸭血粉丝汤',d:'店里可买·配料齐全',p:'¥15'}],
+   rs:[{nm:'第一次来南京',sc:'中国药科大学',tx:'味道中规中矩，但出品比较稳定，是不会出错的选择。'}],
+   mt:['tired','hungry','rush'],heat:7200,rank:2,trend:'st',
+   hotLabel:{text:'来南京的第一碗鸭血粉丝汤',cls:'hl-soul'}},
+  {id:10,nm:'维利康蛋糕',e:'🍰',bg:'linear-gradient(135deg,#12060A 0%,#4A1424 50%,#A63A5C 100%)',pBg:'#FCEEF5',r:4.5,rv:163,pN:25,pLb:'¥25/人',w:5,cp:'C',cn:'本土连锁区',ct:'bakery',tgs:['江宁本土','老店','黑森林'],bd:[],dl:null,hr:'09:00–21:00',hd:false,
+   mn:[{e:'🍫',n:'黑森林蛋糕',d:'巧克力味非常浓郁',p:'¥25'},{e:'🧁',n:'红丝绒',d:'蛋糕体很扎实',p:'¥22'}],
+   rs:[{nm:'江宁土著',sc:'金陵科技学院',tx:'从小吃到大的店，这两年店面越来越少，没想到这儿还能看到。'}],
+   mt:['sweet','happy','tired'],heat:4100,rank:4,trend:'dn',
+   hotLabel:{text:'江宁人从小吃到大·只剩没几家了',cls:'hl-hidden'}},
+  {id:11,nm:'板栗炒货小店',e:'🌰',bg:'linear-gradient(135deg,#120C05 0%,#4A3010 50%,#A06B24 100%)',pBg:'#FFF8EC',r:4.6,rv:98,pN:5,pLb:'¥5 起',w:5,cp:'C',cn:'本土连锁区·回味对面',ct:'snack',tgs:['炒货','山楂','论斤称'],bd:['student'],dl:null,hr:'09:00–22:00',hd:false,
+   mn:[{e:'🌰',n:'糖炒板栗',d:'现炒',p:'¥15/斤'},{e:'🍎',n:'各种山楂制品',d:'称 5 块钱就一大堆',p:'¥5 起'}],
+   rs:[{nm:'追剧党',sc:'南京工程学院',tx:'一样称个 5 块钱的都很多了，特别适合在家刷剧当小零嘴。'}],
+   mt:['broke','sweet','tired'],heat:2900,rank:6,trend:'up',
+   hotLabel:{text:'5块钱一大袋·刷剧嘴替',cls:'hl-hidden'}},
+
+  /* ── D 小吃中段 ── */
+  {id:12,nm:'脆皮烤年糕',e:'🍡',bg:'linear-gradient(135deg,#2E0A00 0%,#8B2500 50%,#E8622C 100%)',pBg:'#FFF3E6',r:4.9,rv:476,pN:4,pLb:'¥4/个',w:3,cp:'D',cn:'小吃中段·排队最长那家',ct:'snack',tgs:['甜辣','厚脆壳','要排队'],bd:['hot'],dl:null,hr:'12:00–22:30',hd:false,
+   mn:[{e:'🍡',n:'甜辣脆皮年糕',d:'四面厚壳·大米锅巴口感·里面软糯',p:'¥4'}],
+   rs:[{nm:'扫街多年',sc:'南京航空航天大学',tx:'卖脆皮年糕的好几家，只有这家门口人多——乖乖排队就对了。'}],
+   mt:['sweet','spicy','broke','rush'],heat:12100,rank:1,trend:'up',
+   hotLabel:{text:'四面起厚脆壳·全街唯一要排队的年糕',cls:'hl-hype'}},
+  {id:13,nm:'活珠子 & 毛鸡蛋',e:'🥚',bg:'linear-gradient(135deg,#141008 0%,#4A3B14 50%,#A8892E 100%)',pBg:'#FFF3E6',r:4.2,rv:204,pN:2,pLb:'¥2/个',w:3,cp:'D',cn:'小吃中段·烤年糕往前一点',ct:'snack',tgs:['南京黑暗料理','猎奇','便宜'],bd:[],dl:null,hr:'14:00–23:00',hd:false,
+   mn:[{e:'🥚',n:'活珠子',d:'十二天左右孵化中的蛋·煮熟即食',p:'¥2'},{e:'🍳',n:'毛鸡蛋',d:'平底锅现炸·可加辣椒面',p:'¥2'}],
+   rs:[{nm:'第一次吃',sc:'中国药科大学',tx:'让老板挑一个炸得比较干的，再来点辣椒面，其实还能接受。'}],
+   mt:['broke','spicy','gather'],heat:5400,rank:3,trend:'st',
+   hotLabel:{text:'南京黑暗料理·敢下嘴算你狠',cls:'hl-vibe'}},
+  {id:14,nm:'手工现压烤冷面',e:'🥠',bg:'linear-gradient(135deg,#0D0A00 0%,#3D3300 50%,#9A7B12 100%)',pBg:'#FFF0E8',r:4.6,rv:231,pN:9,pLb:'¥9/份',w:4,cp:'D',cn:'小吃中段',ct:'noodle',tgs:['现压','双色冷面','自制酱'],bd:['new','hot'],dl:null,hr:'11:00–22:00',hd:false,
+   mn:[{e:'🥠',n:'手工现压烤冷面',d:'两种颜色冷面拼在一起·里面加泡菜',p:'¥9'},{e:'🧀',n:'猎奇加料',d:'咸鸭蛋黄/芝士/小龙虾/火鸡酱',p:'¥3 起'}],
+   rs:[{nm:'烤冷面老饕',sc:'河海大学江宁校区',tx:'吃了这么多年烤冷面，第一次见手工现压的，酱是自制的不会齁咸。'}],
+   mt:['hungry','rush','broke','spicy'],heat:6800,rank:2,trend:'up',
+   hotLabel:{text:'一根根现压的双色冷面·加料能加到离谱',cls:'hl-vibe'}},
+  {id:15,nm:'烤猪蹄',e:'🍖',bg:'linear-gradient(135deg,#1A0000 0%,#7A1500 50%,#D4451F 100%)',pBg:'#FAEDE2',r:4.5,rv:289,pN:15,pLb:'¥15/只',w:4,cp:'D',cn:'小吃中段·方燕/学长猪蹄同一段',ct:'bbq',tgs:['滋滋冒油','剪小块','配手套'],bd:['hot'],dl:null,hr:'16:00–23:30',hd:false,
+   mn:[{e:'🍖',n:'烤猪蹄',d:'烤得软糯没腥味·店家剪成小块',p:'¥15/只'}],
+   rs:[{nm:'猪蹄没抵抗力',sc:'金陵科技学院',tx:'红灯光下滋滋冒油，还贴心地剪成小块给手套，方便边走边啃。'}],
+   mt:['hungry','happy','gather'],heat:7500,rank:2,trend:'up',
+   hotLabel:{text:'剪成小块配手套·边走边啃的快乐',cls:'hl-fire'}},
+  {id:16,nm:'烤面筋',e:'🍧',bg:'linear-gradient(135deg,#1A0A00 0%,#6B2A00 50%,#D4661F 100%)',pBg:'#FAEDE2',r:4.3,rv:176,pN:3,pLb:'¥3/串',w:3,cp:'D',cn:'小吃中段',ct:'bbq',tgs:['经典','便宜','刷酱'],bd:[],dl:null,hr:'14:00–23:00',hd:false,
+   mn:[{e:'🍧',n:'烤面筋',d:'小吃街经久不衰的经典',p:'¥3/串'}],
+   rs:[{nm:'路过就买',sc:'南京工程学院',tx:'没什么惊喜，但每条小吃街都得有它。'}],
+   mt:['broke','spicy','rush'],heat:3300,rank:5,trend:'st',
+   hotLabel:{text:'小吃街的常驻背景音·3块钱一串',cls:'hl-vibe'}},
+  {id:17,nm:'花甲粉',e:'🐚',bg:'linear-gradient(135deg,#001014 0%,#0A3D4A 50%,#2088A0 100%)',pBg:'#FFF0E8',r:4.4,rv:142,pN:16,pLb:'¥16/份',w:4,cp:'D',cn:'小吃中段',ct:'noodle',tgs:['花甲','粉丝','蒜香'],bd:[],dl:null,hr:'15:00–23:30',hd:false,
+   mn:[{e:'🐚',n:'蒜蓉花甲粉',d:'汤汁拌粉',p:'¥16'}],
+   rs:[{nm:'海鲜控',sc:'中国药科大学',tx:'蒜香够冲，粉吸饱汤汁，当宵夜刚好。'}],
+   mt:['hungry','tired','gather','spicy'],heat:3900,rank:4,trend:'st',
+   hotLabel:{text:'宵夜时段的蒜香炸弹',cls:'hl-late'}},
+
+  /* ── E 街尾·尽头一带 ── */
+  {id:18,nm:'现做卷饼',e:'🌯',bg:'linear-gradient(135deg,#0F0A00 0%,#4A3200 50%,#B08420 100%)',pBg:'#FFF8EC',r:4.2,rv:198,pN:12,pLb:'¥12/份',w:6,cp:'E',cn:'街尾·美食街尽头',ct:'rice',tgs:['现烙饼皮','份量大','管饱'],bd:[],dl:null,hr:'11:00–21:30',hd:false,
+   mn:[{e:'🌯',n:'鸡柳豆皮卤蛋三拼',d:'鸡柳目测七八条·手小一把握不住',p:'¥12'},{e:'🫓',n:'现烙饼皮',d:'卷一个饼烤一张皮',p:'—'}],
+   rs:[{nm:'男生饭量',sc:'南京航空航天大学',tx:'味道说实话比较普通，酱料不突出，但胜在份量足，女生吃半个就饱了。'}],
+   mt:['hungry','broke','rush'],heat:4500,rank:3,trend:'st',
+   hotLabel:{text:'一把握不住·正儿八经的管饱硬菜',cls:'hl-cult'}},
+  {id:19,nm:'国足臭豆腐',e:'🧆',bg:'linear-gradient(135deg,#050D08 0%,#173322 50%,#3D7A4E 100%)',pBg:'#FFF3E6',r:4.7,rv:256,pN:8,pLb:'¥8/份',w:6,cp:'E',cn:'街尾·尽头一带',ct:'snack',tgs:['口碑店','好评多','要排队'],bd:['hot'],dl:null,hr:'15:00–23:00',hd:false,
+   mn:[{e:'🧆',n:'油炸臭豆腐',d:'招牌',p:'¥8'}],
+   rs:[{nm:'扑空过',sc:'河海大学江宁校区',tx:'好评特别多，春节去的时候放假没开门，一直惦记到现在。'}],
+   mt:['spicy','broke','rush'],heat:5900,rank:3,trend:'up',
+   hotLabel:{text:'好评榜常客·春节扑空过一次',cls:'hl-hidden'}},
+  {id:20,nm:'阿臻米粉店',e:'🍜',bg:'linear-gradient(135deg,#0A0D14 0%,#243A5C 50%,#4F7AB8 100%)',pBg:'#FFF0E8',r:4.8,rv:187,pN:14,pLb:'¥14/人',w:7,cp:'E',cn:'街尾·尽头一带',ct:'noodle',tgs:['口碑店','汤粉','开门就排队'],bd:['hot'],dl:null,hr:'10:00–21:00',hd:false,
+   mn:[{e:'🍜',n:'招牌米粉',d:'街尾口碑最好的一碗粉',p:'¥14'}],
+   rs:[{nm:'惦记很久',sc:'金陵科技学院',tx:'好评比较多，过年那趟没赶上，开门之后一定补一次。'}],
+   mt:['tired','hungry','rush'],heat:4800,rank:3,trend:'up',
+   hotLabel:{text:'街尾口碑粉店·一开门就排队',cls:'hl-hidden'}},
+  {id:21,nm:'二子鱿鱼',e:'🦑',bg:'linear-gradient(135deg,#14000A 0%,#5C1430 50%,#C0426B 100%)',pBg:'#FAEDE2',r:4.6,rv:221,pN:15,pLb:'¥15/份',w:6,cp:'E',cn:'街尾·尽头一带',ct:'bbq',tgs:['铁板鱿鱼','孜然','香半条街'],bd:['hot'],dl:null,hr:'16:00–23:30',hd:false,
+   mn:[{e:'🦑',n:'铁板鱿鱼',d:'孜然辣椒面',p:'¥15'}],
+   rs:[{nm:'循味而来',sc:'南京工程学院',tx:'隔老远就闻到孜然味，凭味道就能找到店。'}],
+   mt:['spicy','gather','happy','hungry'],heat:5100,rank:3,trend:'up',
+   hotLabel:{text:'孜然味香半条街·闻着就走过去了',cls:'hl-fire'}},
+  {id:22,nm:'郭阿姨月亮馍',e:'🫓',bg:'linear-gradient(135deg,#0F0D05 0%,#3D3512 50%,#9A8A2E 100%)',pBg:'#FFF8EC',r:4.5,rv:134,pN:10,pLb:'¥10/个',w:7,cp:'E',cn:'街尾·尽头一带',ct:'rice',tgs:['夹馍','管饱','口碑店'],bd:[],dl:null,hr:'11:00–21:00',hd:false,
+   mn:[{e:'🫓',n:'月亮馍',d:'饼里夹到满出来',p:'¥10'}],
+   rs:[{nm:'名字党',sc:'中国药科大学',tx:'冲着名字去的，结果成了回头客——可惜过年那次也没开门。'}],
+   mt:['hungry','broke','tired'],heat:3600,rank:4,trend:'st',
+   hotLabel:{text:'名字最好听的管饱选手',cls:'hl-magic'}},
 ];
 
-const MR={hungry:'你说你超饿，这家分量出了名的大！',tired:'累了一天，来一碗热乎乎的暖暖胃～',happy:'值得好好犒劳一下自己！',rush:'距离近出餐快，赶时间也能吃好！',spicy:'想吃辣？这家是大学城辣度天花板！',sweet:'今天就该甜甜地犒劳自己 🍡',gather:'好友聚餐首选！氛围和味道都在线！',broke:'月底穷学生必备，便宜又好吃！'};
-const MM={hungry:{cats:['rice','noodle','hotpot']},tired:{cats:['noodle','rice','snack']},happy:{cats:['hotpot','bbq','dessert']},rush:{cats:['western','rice','noodle']},spicy:{cats:['noodle','bbq','hotpot']},sweet:{cats:['dessert']},gather:{cats:['hotpot','bbq','western']},broke:{cats:['noodle','rice','snack']}};
+const MR={hungry:'你说你超饿，这家在整条街上都是出了名的管饱！',tired:'累了一天，来一份热乎的，边走边吃最治愈～',happy:'值得好好犒劳一下自己！',rush:'就在街口，出餐快，逛吃两不误！',spicy:'想吃辣？这家是义乌美食街的辣度担当！',sweet:'今天就该甜甜地犒劳自己 🍡',gather:'约上室友一起来，这家最有烟火气！',broke:'月底穷学生必备，十块钱以内吃到满足！'};
+const MM={hungry:{cats:['rice','noodle','bbq']},tired:{cats:['noodle','rice','snack']},happy:{cats:['bbq','bakery','drink']},rush:{cats:['snack','drink','rice']},spicy:{cats:['bbq','noodle','snack']},sweet:{cats:['drink','bakery']},gather:{cats:['bbq','snack','noodle']},broke:{cats:['snack','noodle','drink']}};
 
 /* ══════════ STATE ══════════ */
 const favs=new Set();
@@ -789,7 +847,7 @@ let campus='all';
 
 /* ══════════ 视觉工具 ══════════ */
 /* 每个品类一个低饱和暖色底，保证全站只有一套浅色语言 */
-const CV={rice:'#FFF3E6',noodle:'#FFF0E8',bbq:'#FAEDE2',hotpot:'#FFECEC',western:'#FFF6E2',dessert:'#FCEEF5',snack:'#EEF2F9'};
+const CV={rice:'#FFF8EC',noodle:'#FFF0E8',bbq:'#FAEDE2',snack:'#FFF3E6',drink:'#F4F0FA',bakery:'#FCEEF5'};
 const cv=r=>CV[r.ct]||'#FFF1EA';
 
 /* 同款 emoji 铺一层低透明度纹理，卡面不再是一个孤零零的贴纸 */
@@ -798,7 +856,7 @@ const PAT=[[4,7,-14,1],[27,-3,10,.8],[49,13,-6,1.1],[72,1,16,.85],[93,17,-12,.95
            [24,74,-10,1.05],[50,65,6,.9],[75,80,-14,.8],[94,69,10,.95],[13,92,-6,.85],[60,93,12,.9]];
 const pat=e=>`<div class="cv-pat" aria-hidden="true">${PAT.map(p=>`<span style="left:${p[0]}%;top:${p[1]}%;transform:rotate(${p[2]}deg) scale(${p[3]})">${e}</span>`).join('')}</div>`;
 
-/* 校区过滤。原来这个下拉框是死的：onCampus() 只重绘探索页，而探索页又没用 cp 字段 */
+/* 分区过滤。原来这个下拉框是死的：onCampus() 只重绘探索页，而探索页又没用 cp 字段 */
 const byCampus=list=>campus==='all'?list:list.filter(r=>r.cp===campus);
 
 /* ══════════ VIEWS ══════════ */
@@ -989,7 +1047,7 @@ function renderHot(){
   if(hotCatFilter!=='all')list=list.filter(r=>r.ct===hotCatFilter);
   list=list.slice().sort((a,b)=>b.heat-a.heat);
   const el=document.getElementById('hotList');
-  if(!list.length){el.innerHTML='<div class="empty-grid">这个校区暂时没有这一类 🥲</div>';return;}
+  if(!list.length){el.innerHTML='<div class="empty-grid">这一段街上暂时没有这一类 🥲</div>';return;}
   const maxHeat=list[0].heat||1;
   el.innerHTML=list.map((r,i)=>{
     const rank=i+1;
@@ -1026,9 +1084,9 @@ function getRec(){
   setTimeout(()=>{
     const base=byCampus(D).length?byCampus(D):D;
     let pool=base;
-    if(budget==='low')pool=pool.filter(r=>r.pN<=15);
-    else if(budget==='mid')pool=pool.filter(r=>r.pN>15&&r.pN<=30);
-    else if(budget==='high')pool=pool.filter(r=>r.pN>30);
+    if(budget==='low')pool=pool.filter(r=>r.pN<=10);
+    else if(budget==='mid')pool=pool.filter(r=>r.pN>10&&r.pN<=18);
+    else if(budget==='high')pool=pool.filter(r=>r.pN>18);
     if(mood&&MM[mood]){const mp=pool.filter(r=>r.mt.includes(mood));if(mp.length)pool=mp;}
     if(!pool.length)pool=base;
     showRes(pool[Math.floor(Math.random()*pool.length)]);
@@ -1137,7 +1195,7 @@ function toast(msg){
   clearTimeout(tt);tt=setTimeout(()=>el.classList.remove('show'),2600);
 }
 
-/* ══════════ 校区切换 ══════════ */
+/* ══════════ 分区切换 ══════════ */
 /* 原来这个下拉框只调 re()，而 re() 又没读 cp 字段，等于完全没接线 */
 function onCampus(){
   const sel=document.getElementById('campusSel');
@@ -1146,7 +1204,7 @@ function onCampus(){
   initSwipe();
   renderHot();
   re();
-  toast(campus==='all'?'已切换到全部校区':`已切换到${sel.options[sel.selectedIndex].text}`);
+  toast(campus==='all'?'已切换到整条街':`已切换到${sel.options[sel.selectedIndex].text}`);
 }
 function refreshCounts(){
   const n=byCampus(D).length;
